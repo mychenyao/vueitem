@@ -1,0 +1,25 @@
+/* CSS Document */
+
+/*******css reset********/
+
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0; }
+img{border:0;}
+ul li,ol{ list-style:none;}
+a{ text-decoration:none; color:#666;cursor: pointer;}
+/*a:hover{ color:#f22e00;}*/
+input{ outline:none;}
+th,i,em,h1,h2,h3,h4,h5,h6,strong { font-style:normal; font-weight:normal; }
+body {font-size:inherit;font-family:Tahoma,Microsoft YaHei,Sans-serif;background:#fff;font-size: 12px;}
+table { border-collapse: collapse; border-spacing: 0; }
+button { cursor: pointer; }
+
+textarea { word-wrap: break-word; resize: none;}
+.clearfix:after{
+  visibility:hidden;
+  clear:both;
+  display:block;
+  content:".";
+  height:0;
+  overflow:hidden;
+}
+

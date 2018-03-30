@@ -1,0 +1,26 @@
+window.common={
+    predictDomain:"http://app.pre.dingdingkuaixiu.com",  //预发布环境获取支付参数 domain
+    getRequest:"",
+    appid:"wxb5b451d85729641a",  //测试环境
+    apidomain:"http://app.test.dingdingkuaixiu.com",
+    pathDomain:"http://wechat.testdist.dingdingkuaixiu.com",      //支付中转域名  发布正式环境需要修改成正式环境域名
+    // apidomain:"http://192.168.20.86:8891"  //雍挺孝
+    // apidomain:"http://192.168.20.106:8891"  //建伟
+    // apidomain:"http://192.168.20.172:891"  //刘伟
+};
+
+// window.common= {
+//     predictDomain:"http://app.pre.dingdingkuaixiu.com",           //预发布环境获取支付参数 domain
+//     getRequest:"",
+//     appid:"wx1ac10e559cc7ca38",  //预发布环境
+//     apidomain:"http://app.pre.dingdingkuaixiu.com",
+//     pathDomain:"http://wechat.testdist.dingdingkuaixiu.com",      //支付中转域名  发布正式环境需要修改成正式环境域名
+// }
+// window.common={
+//     predictDomain:"http://app.pre.dingdingkuaixiu.com",           //正式环境获取支付参数 domain
+//     getRequest:"",
+//     appid:"wxaea6961118bf712d",  //正式环境
+//     apidomain:"http://app.dingdingkuaixiu.com",
+//     pathDomain:"http://wechat.dingdingkuaixiu.com",      //支付中转域名  发布正式环境需要修改成正式环境域名
+// };
+
