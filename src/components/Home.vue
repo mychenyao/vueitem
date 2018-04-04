@@ -107,7 +107,7 @@
             path:"/wash1/009"
           },
           {
-            name:"灯具电路",
+            name:"灯具线路",
             className:"lanterns",
             path:"/wash1/007"
           },

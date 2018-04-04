@@ -36,7 +36,7 @@
       </div>
       <div id="tabFoot_left" @click="showActive">
         <p>{{countPrice>0?'应付款':'检测费'}}
-          <span>￥{{zongjia}}</span>
+          <span>￥{{addNum()}}</span>
         </p>
         <b v-if="countPrice>0">原价:￥{{(maxNum?maxNum:0)+(yuanjia?yuanjia:0)}}<span></span></b>
 
@@ -102,6 +102,7 @@
        Service : Service
 
     },
+
     watch:{
     	choice:function(newchoice,oldchoice){
     		if(newchoice){
@@ -159,7 +160,9 @@
               this.maxNum = 0;
 
             }
-            this.zongjia =( this.maxNum+this.countPrice).toFixed(2);
+
+
+
          },
          showActive(){ //选中的详情页面
             this.isShow = !this.isShow;
@@ -176,36 +179,40 @@
                this.maxNnmber();
              }else if(item.isSecondPayment == "0"){
                this.countPrice  -=item.price2DiscountFee*1;
-               this.yuanjia -=item.serviceInfo.price2*1;
-               if( this.countPrice < 0){
+               this.yuanjia -=item.price2*1;
+               if( this.countPrice <= 0){
                  this.countPrice =0;
+                 this.yuanjia = 0;
                }
              }
              if(item.size == 0){
                  this.maxNum = 0;
+                 console.log("dsdasdsafsa")
                  this.carts.splice(index,1);
                  this.choice = this.choice-1;
                  this.catsPice.splice(index,1)
                  this.numberJian = item;
                  this.maxNnmber();
                if(this.carts.length == 0){
-                 this.choice = 0;
-                 this.maxNum = 0;
-                 this.countPrice = 0;
+                 this.zongjia = 0;
+                 location.reload();
                }
              }
            },
            add(item,index){//++
-             console.log(item,"sadas")
               item.size++;
                if(item.isSecondPayment == "1"){
                  this.catsPice.push(item.price1);
                  this.maxNnmber();
               }else if(item.isSecondPayment == "0"){
                  this.countPrice  +=  item.price2DiscountFee*1  ;
-                 this.yuanjia -=item.serviceInfo.price2*1;
+                 console.log(this.countPrice)
+                 this.yuanjia -=item.price2*1;
               }
            },
+         addNum(){
+            return  this.zongjia =( this.maxNum?this.maxNum:0+this.countPrice?this.countPrice:0).toFixed(2);
+         },
          appointment(){ //立即预约
             if(this.carts.length <= 0){
                   this.$Toast("还没购买服务");
@@ -253,6 +260,7 @@
               this.isEmpty = true;
               this.countPrice = 0;
               this.yuanjia = 0;
+              location.reload();
          },
          showno(){
          	 this.isShow = false;
@@ -281,14 +289,11 @@
 
 <style scoped lang="less">
 #box{
-   /*position: relative;*/
-  /*height: 25rem;*/
 
    background:#ffffff;
    #tabList{
     width: 100%;
     height: 163/50rem;
-    // margin: 50/50rem 0 60/50rem;
      display: flex;
     padding: 50/50rem 0 60/50rem;
     background:#ffffff;
@@ -410,7 +415,7 @@
       }
     }
     #tabFoot_left{
-      width: 350/50rem;
+      width: 360/50rem;
       height:100%;
       float: left;
       overflow: hidden;
@@ -437,7 +442,7 @@
         font-weight: 100;
         display: block;
         height:42/50rem;
-        font-size:22/50rem;
+        font-size:20/50rem;
         margin-top: 14/50rem;
         font-family:PingFangSC-Medium;
         color:rgba(186,186,186,1);
@@ -518,7 +523,7 @@
         img{
           display: block;
           position: absolute;
-          right: 0.8rem;
+          right: 0.9rem;
           top: 0/50rem;
           width:26/50rem;
           height:36/50rem;
