@@ -27,6 +27,7 @@ import {setCookie,getCookie} from "@/js/cookie"
 export default {
   props:["numberJian","isEmpty","choice"],
   data(){
+    console.log(this.numberJian,"shjahsjahjshaj")
       return{
           repair_left_list:[],//维修主页面左边的列表
           repair_list_index: 0,//维修主页面左边的列表里面b的active
@@ -41,18 +42,33 @@ export default {
   },
   watch:{//监听到0的数据。修改背景框
       "numberJian":function(oldData,newData){
-            this.repair_right_list1.forEach((i,index)=>{
-               if(oldData.labelId === i.a){
-                this.$set(this.repair_right_list1[index],"selector",false);
+        console.log(oldData,"000000000000")
+//            this.repair_right_list1.forEach((i,index)=>{
+//              console.log(i,"000000000000")
+//               if(oldData.labelId === i.a){
+//                this.$set(this.repair_right_list1[index],"selector",false);
+//               }
+//            })
+        this.repair_left_list.forEach((item,index)=>{
+             item.beans.forEach((item1,index1)=>{
+                console.log(item1)
+               if(oldData.labelId === item1.a){
+                 item1.selector = false;
+//                 this.$set(this.repair_right_list1[index1],"selector",false);
                }
-            })
+             })
+        })
       },
-      "isEmpty":function(oldBoolean,newBoolean){
-            if(oldBoolean == true){
-                this.repair_right_list1.forEach((i,index)=>{
-                    i.selector = false;
+      "isEmpty":function(newBoolean,oldBoolean){
+        console.log(oldBoolean)
+              this.repair_left_list.forEach((item,index)=>{
+                item.beans.forEach((item1,index1)=>{
+                  if(newBoolean == true){
+                    item1.selector = false;
+                  }
                 })
-            }
+              })
+
       },
     "choice":function(newchoice,oldchoice){
         if(newchoice == 0){
@@ -65,7 +81,6 @@ export default {
     let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+this.$route.params.id;
 //       let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+"002";
       this.$http.get(url).then(res=>{
-        console.log(res)
       this.repair_left_list = res.data.result.beans;
       this.repair_left_list.forEach((v,i)=>{
       this.repair_left_list[i].selector=false;//给对象加个selector。
@@ -103,8 +118,10 @@ export default {
 
   },
   methods:{
+
     //点击左侧的li列表
     repair_listActive1(index,beans,id,item){
+      console.log(beans,"sjjjjjjjjjjjjjjjjjj")
        this.repair_list_index =index;
        this.repair_list_index1 =index;
        this.repair_right_list1=beans;
@@ -114,12 +131,10 @@ export default {
        this.$store.commit("changeSaverId",id)
     },
     repair_listActive2(i,index){
-      console.log(i, index);
       //跟新对象内的数组数据
 
 
        this.$set(this.repair_right_list1[index],"selector",!this.repair_right_list1[index].selector);
-       console.log(this.repair_right_list1[index])
      /*---------*/
 
        this.repair_left_list[this.repair_list_index1].num = 0
@@ -135,7 +150,6 @@ export default {
         let areaId=getSession()[0].id,
         url2= `${this.$common.apidomain}/articleinfo/findlistserviceinfo?labelId=${i.a}&areaId=${areaId}&token=${getCookie()?getCookie():''}`;
         this.$http.get(url2).then(res=>{
-          console.log(res);
           if(!res.data.result){
             i.selector = false;
             this.repair_left_list[this.repair_list_index1].num -= 1;
@@ -143,7 +157,6 @@ export default {
             return
           }else{
                 this.obj1 = res.data.result.map((i,index1)=>{
-                  console.log(res.data.result);
                   if(this.repair_right_list1[index].selector == true){
                     i.serviceInfo.size = 1;
 

@@ -36,13 +36,13 @@
       </div>
       <div id="tabFoot_left" @click="showActive">
         <p>{{countPrice>0?'应付款':'检测费'}}
-          <span>￥{{addNum()}}</span>
+          <span>￥{{addNum}}</span>
         </p>
         <b v-if="countPrice>0">原价:￥{{(maxNum?maxNum:0)+(yuanjia?yuanjia:0)}}<span></span></b>
 
           <ul>
             <li>已选</li>
-            <li class="classLi" :class="{'styleActive':styleCssA}">{{choice}}</li>
+            <li class="classLi" :class="{'styleActive':styleCssA}">{{choiceOne}}</li>
             <li class="classLi1">项</li>
           	<li><img :src="showImg"  id="Images"/></li>
           </ul>
@@ -58,15 +58,8 @@
 
 <script>
 
-  // import { MessageBox } from 'mint-ui';
    import {getCookie} from "@/js/cookie"
-  // import common from "@/js/baseHttp"
    import {Indicator} from "mint-ui"
-  // import { Indicator } from 'mint-ui';
-//   import {getSession,setSession,removerStorage,getLocalStorage,setLocalStorage} from "@/js/session"
-  // import {priceCount} from "@/js/priceCountFun"
-  // import tags from "./tags";
-  // import {thFn,selectorFun} from "./js/selector"
      import Repair from "./washPage/Repair.vue"
      import Cost from "./washPage/Cost.vue"
      import Service from "./washPage/Service.vue"
@@ -80,19 +73,18 @@
             tabIndex : 0,
             tabIndex1 : 0,
             isShow1:false, //头部显示一个还是3个2个
-            choice:0,
+            choice:0,  //选的服务项目数量
             isShow:false,
-            tabFootDetail:{display:"none"},
             showImg:"./static/images/bottom.png",//旋转度数图片
             catsPice:[],//找最高的价格
             carts:[], //商品详情数组
-            numberJian : 0,
-            isEmpty:false,
-            styleCssA:false,
+            numberJian : 0, //
+            isEmpty:false,  //是否清空
+            styleCssA:false,  //
             maxNum:0, //最大数字
             countPrice: 0, //求和
-            zongjia:0,
-            yuanjia:0,
+            zongjia:0,  //总价
+            yuanjia:0,  //原价
 
         }
     },
@@ -102,9 +94,23 @@
        Service : Service
 
     },
+    computed:{
+      addNum(){ //计算总价
+                if(this.carts.length <= 0){
+                  this.maxNum = 0;
+                  this.countPrice = 0;
+                }
+                return  this.zongjia =( this.maxNum?this.maxNum:0+this.countPrice?this.countPrice:0).toFixed(2);
+
+
+      },
+      choiceOne(){ //计算选的项目数量
+        return this.choice =  this.carts.length;
+      }
+    },
 
     watch:{
-    	choice:function(newchoice,oldchoice){
+    	choice:function(newchoice,oldchoice){  //监听项目数量改变实现动画
     		if(newchoice){
     			 this.styleCssA = true;
     			 var a = 1;
@@ -119,13 +125,12 @@
     	}
     },
     methods:{
-          tabActive(index){
+          tabActive(index){  //切换选中选中类型
             this.tabIndex=index;
             this.tabIndex1=index;
           },
-          data(msg,bool,indexOne){
+          data(msg,bool,indexOne){  //子组件传来的数据，父组件接受
             this.isBool = bool;
-              console.log(msg,"jfdsafksdkfksdkfks")
               if(this.isBool == true){
                     this.styleCssA =msg.styleCss;
                     this.carts.push(msg.serviceInfo);
@@ -143,7 +148,6 @@
                          if(msg.serviceInfo.isSecondPayment == "1"){
                            this.catsPice.splice(i,1); //删除选中的选择项
                            this.maxNnmber();
-                           console.log(this.catsPice)
                               }else if(msg.serviceInfo.isSecondPayment == "0"){
                                     this.countPrice -=v.price2DiscountFee*1;
                                      this.yuanjia -=msg.serviceInfo.price2*1;
@@ -151,29 +155,24 @@
                           }
                   })
             }
-            console.log(this.carts)
-            this.choice =  this.carts.length;
-            if( this.carts.length <= 0){
-              this.choice = 0;
-              this.countPrice = 0;
-              this.yuanjia =0;
-              this.maxNum = 0;
-
-            }
-
-
 
          },
          showActive(){ //选中的详情页面
-            this.isShow = !this.isShow;
-            if(this.isShow == true){
-              this.showImg = "./static/images/buttomTop.png";
+
+            if(this.carts.length <= 0){
+              return this.$Toast("你还没购买服务，请先购买服务")
             }else{
-              this.showImg = "./static/images/bottom.png";
+              this.isEmpty = false;
+              this.isShow = !this.isShow;
+              if(this.isShow == true){
+                this.showImg = "./static/images/buttomTop.png";
+              }else{
+                this.showImg = "./static/images/bottom.png";
+              }
             }
+
          },
-           reduce(item,index){
-             console.log(item)             //--
+           reduce(item,index){       //--
               item.size--;
              if(item.isSecondPayment == "1"){
                this.maxNnmber();
@@ -187,32 +186,31 @@
              }
              if(item.size == 0){
                  this.maxNum = 0;
-                 console.log("dsdasdsafsa")
                  this.carts.splice(index,1);
                  this.choice = this.choice-1;
-                 this.catsPice.splice(index,1)
+                  this.carts = this.carts.filter(function(item1){
+             return  item1 != item
+           })
                  this.numberJian = item;
                  this.maxNnmber();
-               if(this.carts.length == 0){
-                 this.zongjia = 0;
-                 location.reload();
-               }
+
              }
+             this.noCarts()
            },
            add(item,index){//++
-              item.size++;
+
                if(item.isSecondPayment == "1"){
-                 this.catsPice.push(item.price1);
+                 this.$Toast("此服务只能选一次");
                  this.maxNnmber();
+                 item.size =1;
+
               }else if(item.isSecondPayment == "0"){
+                 item.size++;
                  this.countPrice  +=  item.price2DiscountFee*1  ;
-                 console.log(this.countPrice)
                  this.yuanjia -=item.price2*1;
               }
            },
-         addNum(){
-            return  this.zongjia =( this.maxNum?this.maxNum:0+this.countPrice?this.countPrice:0).toFixed(2);
-         },
+
          appointment(){ //立即预约
             if(this.carts.length <= 0){
                   this.$Toast("还没购买服务");
@@ -254,20 +252,20 @@
          },
          emptyClick(){ //清空服务项
               this.carts.splice(0,this.carts.length);
-              this.maxNum = 0;
-              this.choice = 0;
               this.isShow = false;
               this.isEmpty = true;
-              this.countPrice = 0;
-              this.yuanjia = 0;
-              location.reload();
+              this.noCarts()
          },
-         showno(){
+         showno(){ //选择清单消失
          	 this.isShow = false;
          	 this.showImg = "./static/images/bottom.png";
          },
-         maxNnmber(){
-               //排序获取最大服务费
+        noCarts(){ //没有购买服务服务清单消失
+            if(this.carts.length <= 0){
+               this.showno()
+            }
+         },
+         maxNnmber(){ //选择最大数一口价的
                this.maxNum = this.catsPice[0];
                for(let i=0;i<this.catsPice.length;i++){
                  if(this.maxNum <this.catsPice[i]){
@@ -278,6 +276,7 @@
 
     },
     created(){
+      //看头部是三个tab还是两个
      if(this.$route.params.id === "001" || this.$route.params.id === "009"){
         this.isShow1 = false;
      }else{
