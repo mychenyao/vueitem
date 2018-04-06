@@ -74,10 +74,10 @@ export default {
    top:163/50rem;
    background: #FFFFFF;
    bottom: 126/50rem;
-   overflow: hidden;
-   overflow-y: auto;
+   oerflow: hidden;
    }
  div{
-   width: 100%;
+     width: 100%;
+     overflow-y: auto;
  }
 </style>
