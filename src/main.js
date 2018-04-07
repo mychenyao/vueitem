@@ -23,6 +23,11 @@ import { state } from "@/components/vuex/state";
 import {setCookie,getCookie} from "@/js/cookie"
 import {UrlSearch,commonSetSession} from "@/js/session"
 import VueCookie from "vue-cookie"
+//解决300毫秒的延迟问题
+// import FastClick from "fastclick"
+// FastClick.attach(document.body)
+var VueTouch = require('vue-touch');
+Vue.use(VueTouch, { name: 'v-touch'});
 
 // Tell Vue to use the plugin
 Vue.use(VueCookie);

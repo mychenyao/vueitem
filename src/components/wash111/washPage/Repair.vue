@@ -12,11 +12,11 @@
       </div>
       <div id="repaire_right">
             <ul id="repaire_right_list">
-                <li v-for="(i,index2) in repair_right_list1"
-                @click="repair_listActive2(i,index2)"
+                <v-touch tag="li"  v-for="(i,index2) in repair_right_list1"
+                v-on:tap="repair_listActive2(i,index2)"
                 :class="{repair_rightActive1:i.selector}">
                     {{i.b}}
-                </li>
+                </v-touch>
              </ul>
       </div>
   </div>
@@ -42,13 +42,6 @@ export default {
   },
   watch:{//监听到0的数据。修改背景框
       "numberJian":function(oldData,newData){
-        console.log(oldData,"000000000000")
-//            this.repair_right_list1.forEach((i,index)=>{
-//              console.log(i,"000000000000")
-//               if(oldData.labelId === i.a){
-//                this.$set(this.repair_right_list1[index],"selector",false);
-//               }
-//            })
         this.repair_left_list.forEach((item,index)=>{
              item.beans.forEach((item1,index1)=>{
                 console.log(item1)
@@ -121,7 +114,6 @@ export default {
 
     //点击左侧的li列表
     repair_listActive1(index,beans,id,item){
-      console.log(beans,"sjjjjjjjjjjjjjjjjjj")
        this.repair_list_index =index;
        this.repair_list_index1 =index;
        this.repair_right_list1=beans;

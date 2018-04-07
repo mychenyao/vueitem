@@ -130,8 +130,7 @@
             this.tabIndex1=index;
           },
           data(msg,bool,indexOne){  //子组件传来的数据，父组件接受
-            this.isBool = bool;
-              if(this.isBool == true){
+              if(bool == true){
                     this.styleCssA =msg.styleCss;
                     this.carts.push(msg.serviceInfo);
                     if(msg.serviceInfo.isSecondPayment == "1"){
@@ -141,7 +140,7 @@
                           this.countPrice +=msg.serviceInfo.price2DiscountFee*1;
                            this.yuanjia +=msg.serviceInfo.price2*1;
                     }
-              }else if(this.isBool == false){
+              }else if(bool == false){
                     this.carts.forEach((v,i)=>{
                       if(msg.serviceInfo.id===v.id){
                         this.carts.splice(i,1); //删除选中的服务

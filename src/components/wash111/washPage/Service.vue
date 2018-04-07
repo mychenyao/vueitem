@@ -77,7 +77,7 @@ export default {
    oerflow: hidden;
    }
  div{
-     width: 100%;
-     overflow-y: auto;
+   width: 100%;
+   overflow-y: auto;
  }
 </style>
