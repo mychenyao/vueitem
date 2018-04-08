@@ -49,7 +49,6 @@
 <script>
   import {autoiscroll} from "../../static/js/autoiscroll";
   import {setSession,getSession,setSessionUserInfo} from "@/js/session"
-//  import common from "../js/baseHttp"
   import homeData from "@/components/homeData/homeData"
   import { Indicator } from 'mint-ui';
   import homeSaver from "./homeSaverList/homeSaver"
@@ -164,9 +163,8 @@
 <style scoped lang="less">
   .declare_container{
       background:#fff;
-
-    padding:78/50rem 0;
-    padding-bottom:2.06rem;
+      padding:78/50rem 0;
+      padding-bottom:2.06rem;
       width:100%;
       >h3{
         height:43/50rem;
