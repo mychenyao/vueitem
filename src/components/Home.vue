@@ -157,7 +157,7 @@
 //    //定位城市；
     },
    mounted(){
-
+     console.log("测试");
    },
   }
 </script>
