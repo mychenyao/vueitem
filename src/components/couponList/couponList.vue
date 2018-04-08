@@ -1,17 +1,14 @@
 <template>
   <div id="box">
-   <mt-navbar v-model="selected">
-		  <mt-tab-item id="1"><span style="font-size:.64rem">未使用</span></mt-tab-item>
-		  <mt-tab-item id="2"><span style="font-size:.64rem">已使用</span></mt-tab-item>
-		  <mt-tab-item id="3"><span style="font-size:.64rem">已过期</span></mt-tab-item>
-</mt-navbar>
-<!-- tab-container -->
-<mt-tab-container v-model="selected" :swipeable="bool">
-  <mt-tab-container-item id="1">
-    <!--待付款-->
-   	<div class="keep_container">
+  <!--seach 手动添加卷码 start-->
+<!---->
+    <search-coupon v-if="!isAlert" :data="exchangeText" :callBackFun="exchange"></search-coupon>
+
+  <!--seach 手动添加卷码 end-->
+
+   	<div class="keep_container" v-if="!isAlert">
    		<ul>
-		    <router-link tag="li" to="/" v-for="(item,index) in dataList" :key="index">
+		    <router-link tag="li" to="/" v-for="(item,index) in dataList" :key="index" :class="{'background_image':item.serviceDiscount.discountState===3}">
 						<div class="left">
 								<div class="price">￥<span>{{item.serviceDiscount.discountFacevalue}}</span></div>
 								<div class="text_content">
@@ -21,36 +18,15 @@
 								</div>
 						</div>
 						<div class="right">
-							立即使用
+              {{item.serviceDiscount.discountState===3?'已过期':'立即使用'}}
 						</div>
 		    </router-link>
-		</ul>
+		  </ul>
    	</div>
-    <div class="alert" v-if="isAlert.isShow1">
+    <div class="alert" v-if="isAlert">
       <img src="../../assets/images/wuyouhuij.png" alt="">
       <p>你现在没有可用优惠券哦！</p>
     </div>
-  </mt-tab-container-item>
-
-  <mt-tab-container-item id="2">
-    <accomplish :isLodow="lodow" v-if="isShow" :isAlert="isAlert"></accomplish>
-    <div class="alert" v-if="isAlert.isShow2">
-      <img src="../../assets/images/wuyouhuij.png" alt="">
-      <p>你现在没有已使用优惠券哦！</p>
-
-    </div>
-  </mt-tab-container-item>
-
-
-  <mt-tab-container-item id="3" v-if="isShow" >
-    <cancel :isAlert="isAlert"></cancel>
-    <div class="alert" v-if="isAlert.isShow3">
-      <img src="../../assets/images/wuyouhuij.png" alt="">
-      <p>你现在没有已过期优惠券哦！</p>
-
-    </div>
-  </mt-tab-container-item>
-</mt-tab-container>
   </div>
 </template>
 <script>
@@ -58,24 +34,25 @@
  import {setLocalStorage,removerStorage} from "@/js/session"
  const accomplish = resolve =>require(["./accomplish"],resolve);
  const cancel = resolve =>require(["./cancel"],resolve);
-// import common from "@/js/baseHttp"
  import {Toast} from "mint-ui";
  import { Indicator } from 'mint-ui';
  import {AFFIRM} from "@/components/savertype/js/isStatus"
+ import searchCoupon from "@/components/couponList/searchCoupon"
+//已过期暂未解决；
 
 export default {
   components:{
     accomplish,
-    cancel
+    cancel,
+    searchCoupon
   },
   data () {
     return {
       bool:true,
       j:true,
-      isAlert:{
-        isShow1:true,
-        isShow2:true,
-        isShow3:true
+      isAlert:true,
+      exchangeText:{
+        value:""
       },
       value:"",
       isShow:true,
@@ -89,33 +66,52 @@ export default {
     isAffirm(input){
      return AFFIRM(input);
     },
-    active(){
-
-    },
     sendDetailed(item,index){
       removerStorage("orderDetails");
       setLocalStorage("orderDetails",item);
       this.$store.commit("changeOrder",item);
       this.$router.push({path:"/staymoney"});
     },
-    getData(){
-      this.isAlert.isShow1=false;
+// 兑换优惠券 start
+    exchange(){
+      let value=this.exchangeText.value,currentText,
+          url=`${this.$common.apidomain}/userInfoDiscount/bindingVoucherCodeUserInfoDiscount`;
+      if(!value){
+        this.$Toast("请输入折扣码");
+      }else{
+        currentText=value.replace(/\s+/g, "");
+        this.$http.post(url,{"token":getCookie(),"discountDetailedId":currentText}).then(res=>{
+          const data=res.data;
+          if(data.code==="0000"){
+            this.dataList=[];
+            this.getData("0",()=>{
+              this.getData("2");
+              this.$Toast("兑换成功")
+            });
+          }else{
+            this.$Toast(data.error);
+          }
+        })
+      }
+    },
+// 兑换优惠券 end
+    getData(state,callBack=null){
+      this.isAlert=false;
       if(!this.dataList.length){
-        this.isAlert.isShow1=true;
+        this.isAlert=true;
       }
       let token=getCookie();
       if(token){
           let url=`${common.apidomain}/userInfoDiscount/findUserInfoDiscount`;
-          this.$http.post(url,{"token":token,"state":"0"}).then(res=>{
+          this.$http.post(url,{"token":token,"state":state}).then(res=>{
             let data=res.data;
             if(data.code==="0000"){
-              this.dataList=data.result;
+              this.dataList=this.dataList.concat(data.result);
               Indicator.close();
               this.isShow=true;
-              this.isAlert.isShow1=false;
-              if(this.dataList.length===0){
-                this.isAlert.isShow1=true;
-              }
+              this.isAlert=false;
+              if(!!callBack)callBack('2');
+              if(this.dataList.length===0)this.isAlert=true;
             }else if(data.code!=="3049"){
               Toast(res.data.error);
             }
@@ -135,23 +131,27 @@ export default {
   },
    mounted(){
      document.title="优惠券";
+
     },
     created(){
+//     this.$Toast("折扣码无效，请重试");
      if(window.location.href.indexOf(common.pathDomain)!==-1){
-       this.getData();
+       this.getData("0",()=>{
+         this.getData("2");
+       });
      }else{
        setTimeout(()=>{
-         this.getData();
+         this.getData("0",()=>{
+           this.getData("2");
+         });
        },1000)
      }
-
     }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
   .alert{
-
     width:100vw;
     height:85vh;
     text-align: center;
@@ -187,32 +187,20 @@ a{
 }
 #box{
   font-family: PingFangSC-Regular;
-  margin-bottom:1.96rem;
-.mint-tab-item{
-	font-family: PingFangSC-Regular;
-	font-size: 32/50rem;
-	padding-top:.7rem;
-	letter-spacing: 0;
+  height:100vh;
+  overflow: hidden;
 }
->.mint-navbar{
-	height:100/50rem;
-}
-}
-.mint-navbar {
-	.mint-tab-item.is-selected{
-		border-bottom: 3px solid #EB5312;
-		color:#EB5312;
-	}
-}
-.mint-tab-item-label{
-	font-family: PingFangSC-Regular;
-	font-size: 32/50rem;
-	letter-spacing: 0;
-}
+
+
 .keep_container{
 	margin-top:.5rem;
+  background:#fff;
+  height: 100%;
+  padding-top:40/50rem;
+  overflow: auto;
   >ul{
   	padding:0 20/50rem;
+    padding-bottom:4.5rem;
     >li{
     	margin:20/50rem 0;
       background:url(../../assets/images/youhuiback.png)center center no-repeat;
@@ -256,15 +244,12 @@ a{
 					letter-spacing: 0;
    		}
     }
+    >.background_image{
+      background:url(../../assets/images/wang.png)center center no-repeat;
+      background-size:100% 100%;
+    }
   }
 }
-.mui-table-view-cell:after{
-  background:none;
-}
-.mui-table-view-cell:last-of-type{
-  border-bottom:none;
-}
-
   /*支付*/
 .defray_content{
   width:100%;
@@ -319,13 +304,6 @@ a{
   height:auto;
 }
 }
-  /*&.fade-enter-active, &.fade-leave-active{*/
-    /*transition: all 2s ease*/
-  /*}*/
-
- /*&.fade-enter, &.fade-leave-active{*/
-   /*transform:translateX(100px);*/
-  /*}*/
 
 
 </style>
