@@ -151,13 +151,13 @@
               this.articleList=data.articleInfo;
               this.salePageBottom=data.salePageBottom;
         }else{
-              this.$Toast(res.data.error);
+            this.$Toast(res.data.error);
         }
       });
 //    //定位城市；
     },
    mounted(){
-     console.log("测试");
+
    },
   }
 </script>
