@@ -166,16 +166,15 @@
   import {setCookie,getCookie,getOpenID} from "@/js/cookie"
   import {isWeixin,onBridgeReady} from "@/js/isWeixin"
   import {isPosition} from "@/js/isPosition"
-//  import common from "@/js/baseHttp";
   import {Toast}  from "mint-ui"
   import {formalDefray} from "@/components/savertype/js/payment"
   import { Indicator } from 'mint-ui';
-  import searchCoupon from "@/components/couponList/searchCoupon"
+//  import searchCoupon from "@/components/couponList/searchCoupon"
   var indexPath=window.location.href.indexOf("#/")+2,urlHref=window.location.href.substring(0,indexPath);
   export default {
-        components:{
-          searchCoupon
-        },
+//        components:{
+//          searchCoupon
+//        },
         data() {
             return {
               originalSum:0,
