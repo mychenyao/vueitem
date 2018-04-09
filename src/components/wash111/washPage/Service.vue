@@ -22,7 +22,7 @@ export default {
             this.$store.state.saverId = "004001"
         }else if(this.$route.params.id === "008"){
 
-          this.$store.state.saverId = "004001"
+          this.$store.state.saverId = "008001"
 
         }else if(this.$route.params.id === "001"){
 

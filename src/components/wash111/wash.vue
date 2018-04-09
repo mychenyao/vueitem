@@ -38,7 +38,7 @@
         <p>{{countPrice>0?'应付款':'检测费'}}
           <span>￥{{addNum}}</span>
         </p>
-        <b v-if="countPrice>0">原价:￥{{(maxNum?maxNum:0)+(yuanjia?yuanjia:0)}}<span></span></b>
+        <b v-if="countPrice>0">{{(maxNum?maxNum:0)+(yuanjia?yuanjia:0)}}<span></span></b>
 
           <ul>
             <li>已选</li>
@@ -274,6 +274,8 @@
          }
 
     },
+    mounted(){
+    },
     created(){
       //看头部是三个tab还是两个
      if(this.$route.params.id === "001" || this.$route.params.id === "009"){
@@ -281,6 +283,7 @@
      }else{
           this.isShow1 = true;
      }
+     
     }
 }
 </script>
@@ -437,10 +440,9 @@
 
       }
       b{
-        font-weight: 100;
         display: block;
         height:42/50rem;
-        font-size:20/50rem;
+        font-size:24/50rem;
         margin-top: 14/50rem;
         font-family:PingFangSC-Medium;
         color:rgba(186,186,186,1);
