@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="footer" v-show="!isSelectOption&&!isSelectStreet" @click="meory(isStreet,text,position)">
-        <div class='accounts_btn' >
+        <div class='accounts_btn'>
           保存
         </div>
       </div>

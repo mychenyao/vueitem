@@ -2,7 +2,7 @@ window.common={
     predictDomain:"http://app.pre.dingdingkuaixiu.com",  //预发布环境获取支付参数 domain
     getRequest:"",
     appid:"wxb5b451d85729641a",  //测试环境
-    // apidomain:"http://app.dingdingkuaixiu.com",
+    apidomain:"http://app.dingdingkuaixiu.com",
     apidomain:"http://app.test.dingdingkuaixiu.com",
     customService :"https://177dd.udesk.cn/im_client/?web_plugin_id=38935",
     pathDomain:"http://wechat.testdist.dingdingkuaixiu.com",      //支付中转域名  发布正式环境需要修改成正式环境域名
