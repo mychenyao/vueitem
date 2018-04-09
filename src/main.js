@@ -7,7 +7,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import "mint-ui/lib/style.min.css"
-// console.log(window.common);
 import "../static/mui/css/mui.css"
 import "../static/js/rem.js"
 import commonJs from "@/js/commonJs"
@@ -19,7 +18,6 @@ import Vuex from "vuex"
 import { mutations } from "@/components/vuex/mutations"
 import { state } from "@/components/vuex/state";
 // import common from "../static/js/baseHttp";
-// window.common=window.common;
 import {setCookie,getCookie} from "@/js/cookie"
 import {UrlSearch,commonSetSession} from "@/js/session"
 import VueCookie from "vue-cookie"
@@ -33,7 +31,6 @@ Vue.use(VueTouch, { name: 'v-touch'});
 Vue.use(VueCookie);
 import {historyPath,getCurrentUrl} from "@/js/pathBack"
 import animate from 'animate.css'
-
 Vue.prototype.$moment=moment;
 Vue.prototype.$commonJs=commonJs;
 Vue.prototype.$historyPath=historyPath;
@@ -52,7 +49,6 @@ Vue.prototype.$http = axios;
 Vue.use(mintui);
 Vue.config.productionTip = false;
 import "../static/css/common.css"
-
   new Vue({
     el: '#app',
     router,
