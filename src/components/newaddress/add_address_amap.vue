@@ -1,19 +1,17 @@
 <template>
   <div>
     <div id="box">
-      <!--<mt-field label="联系人" placeholder="请输入用户名" ></mt-field>-->
-      <!--<mt-field label="手机" placeholder="请输入手机号" type="tel"></mt-field>-->
       <div class="input_box">
         <div class="content">
           <div class="contacts">联系人</div>
-          <input class="user_name" type="text" v-model="name" @blur="testName(name)" @focus="clearPositio('1')">
+          <input class="user_name" type="text" placeholder="请输入联系人" v-model="name" @blur="testName(name)" @focus="clearPositio('1')">
         </div>
         <div class="content">
           <div class="contacts">手机号</div>
-          <input class="user_name" @blur="telTest(tel)" type="tel" v-model="tel" @focus="clearPositio('1')">
+          <input class="user_name" @blur="telTest(tel)" placeholder="请输入联系人手机号" type="tel" v-model="tel" @focus="clearPositio('1')">
         </div>
         <div class="content"  @click="select">
-          <div class="contacts " style="letter-spacing:0">小区大厦</div>
+          <div class="contacts " style="letter-spacing:0">地&nbsp;&nbsp;&nbsp;&nbsp;址</div>
           <!--<p class="user_name">{{position}}</p>-->
           <div class="user_name">
             {{iframe_address}}
@@ -22,32 +20,9 @@
             <!--&nbsp;<b></b>-->
           </div>
         </div>
-        <!--lee 注释 2018-1-4 s-->
-        <!--<div class="content" @click="selectStreet">-->
-          <!--<div class="contacts">街道</div>-->
-          <!--<p class="user_name" v-text="isStreet"></p>-->
-          <!--<div class="select1">请选择  &nbsp;<b></b> </div>-->
-        <!--</div>-->
-        <!--lee 注释 2018-1-4 e-->
         <div class="content replenish">
            <textarea @focus="clearPositio('1')" class="user_name" @change="importText" v-model="text" @keyup="testText(text)"  placeholder="请补充地址信息，如5号楼4单元26号"></textarea>
         </div>
-      </div>
-<!--picker start-->
-
-      <!--<div class="select_option" v-if="isSelectOption">-->
-        <!--<div class="success_res">-->
-          <!--&lt;!&ndash;<div class="cancel"  @click="clearPositio">取消</div>&ndash;&gt;-->
-          <!--&lt;!&ndash;<div class="success" @click="isShowPosition">完成</div>&ndash;&gt;-->
-        <!--</div>-->
-        <!--&lt;!&ndash;<mt-picker :slots="slots" @change="onValuesChangePosition"></mt-picker>&ndash;&gt;-->
-      <!--</div>-->
-      <div class="select_option" v-if="isSelectStreet">
-        <div class="success_res">
-          <div class="cancel"  @click="clearStreet('2')">取消</div>
-          <div class="success" @click="selectorStreet">完成</div>
-        </div>
-        <!--<mt-picker :slots="slotsStreet" @change="onValuesChangeStreet"></mt-picker>-->
       </div>
       <div class="footer" v-show="!isSelectOption&&!isSelectStreet" @click="meory(isStreet,text,position)">
         <div class='accounts_btn' >
@@ -85,7 +60,7 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
             Toast("手机号格式不正确");
             return
           }else if(!(/^[0-9a-zA-Z\u4e00-\u9fa5_]{1,20}$/.test(this.name))){
-            Toast("用户名格式不正确");
+            Toast("联系人格式不正确");
             return
           }else if(this.indexId==="0"){     //this.indexId   判断是新增还是修改 0是新增  1是修改
             if(!this.getCurrentPosition.addressComponent||!this.iframe_address){   //getCurrentPosition.addressComponent 高德返回参数   iframe_address  地址名称
@@ -159,7 +134,7 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
       },
       testName(name){
         if(!(/^[0-9a-zA-Z\u4e00-\u9fa5_]{1,20}$/.test(name))){
-          Toast("用户名格式不正确");
+          Toast("联系人格式不正确");
           return false
         }else{
           return true
@@ -167,7 +142,7 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
       },
       telTest(val){
        if(!(/^1[34578]\d{9}$/.test(this.tel))){
-         Toast("手机号格式不正确");
+         Toast("联系人格式不正确");
          return false;
        }else{
          return true;
@@ -250,77 +225,14 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
           this.isSelectStreet=false;
           this.isStreet="";
       },//取消选择 街道
-      chackchange(values){
-        if(sheng[0]!=values[0])return 0;
-        if(sheng[1]!=values[1])return 1;
-        if(sheng[2]!=values[2])return 2;
-        return 999;
-      },
-      //选择省市区
-
-//      onValuesChangePosition(picker,values){
-//        if(this.flag){
-//          this.flag=false;
-//           values[0]='广东省'
-//        }
-//        if(!this.jieliufa)return;
-//        this.position = (values[0]===undefined?"":values[0])+" "+(values[1]===undefined?" ":values[1])+" "+(values[2]===undefined?" ":values[2]);
-//        if(values[0]==undefined){
-//          this.position="";
-//        }
-//        var c = this.chackchange(values);
-//
-//        if(0==c){
-//          this.getCityValues(picker,this.getShengId(values[0]));
-//          sheng[0] = values[0];
-//        }else if(1==c){
-//          this.getAreaValues(picker,this.getShiId(values[1]));
-//          sheng[1] = values[1];
-//
-//        }else if(2==c){
-//          sheng[2] = values[2];
-//
-//        }else if(999==c){
-//        }
-//        this.shiId = this.getStreet(values[2])  //区对象数组 得到区id 传给街道
-//      },
-      getAreaList(){
-          getAreaList().then(respon=>{
-            let code=respon["code"];
-          })
-      },
-//      onValuesChangeStreet(picker, values) {
-//        this.isStreet=values[0]
-//      },
       //获取省市区 start
       select(){   //深市区选择；
 
         //lee 注释 2018-1-4 s
         this.iframe_show=true; //lee显示地图
-//        return
-//        //lee 注释 2018-1-4 e
 //
-//        this.flag=true;
-//       area=[];//区级数据；
-//        province=[]; //省级数据
-//        city.length=0; //市级数据
-//        city=[]; //市级数据
-//       sheng=[];
-//        if(this.isSelectStreet){
-//          return;
-//        }
-//        this.isSelectOption=!this.isSelectOption;
-//        this.position='';
-//        this.slotsStreet[0].values=[];
-//        this.isStreet="";
       },
-      //获取省市区 end
-//      isShowPosition(){
-//        this.isSelectOption=false;
-//        if(this.isSelectStreet){
-//          this.isSelectStreet= !this.isSelectStreet;
-//        }
-//      },
+
       //获取街道数据 start
       selectStreet(){
         this.slotsStreet[0].values= streetData;
@@ -599,7 +511,7 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
       line-height:2rem;
       letter-spacing:.1rem;
       font-family:PingFangSC-Light;
-      color:#929292;
+      color:#000;
     }
     >.user_name{
       line-height: 88/50rem;

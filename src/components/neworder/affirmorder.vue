@@ -1,13 +1,11 @@
 <template>
     <div id="box" ref="box">
        <div class="location_box address"  v-for="(item,index) in positionInfo" @click="addPosition">
-         <p class="border_image"></p>
+         <!--<p class="border_image"></p>-->
          <p class="bottom"></p>
          <i class="border_img_bottom"></i>
          <b class="position_icon"></b>
-         <!--linkmanPhoneNum-->
           <div class="content">
-            <!--<div style="float:none;width:100%;">linkmanName</div>-->
               <p id="address_linkmanDetails" :class="{'selectorColor':positionClassSelector}">{{item.linkmanDetails}}</p>
           </div>
          <b class="right_arrow"></b>
@@ -23,7 +21,7 @@
 <!--服务时间 end -->
 
 <!--优惠券 start-->
-  <div class="add_serve hitch" v-for="(item,index) in dataList" :key="index" v-if="dataList.length>0">
+  <div class="add_serve hitch" v-for="(item,index) in dataList" :key="index" v-if="dataList.length>0" :style="index===0?'border:none':''">
         <div class="addserve_tite">
           <div class="product_right" style="min-height:3rem;">
             <span class="product_fullName" style="font-weight: normal">
@@ -125,7 +123,7 @@
       <div class="footer submit_button" v-if="dataList.length>0">
         <a class="accounts_btn" href="javascript:;" @click="submit">支 付</a>
         <p class="amount">
-            <span>
+            <span style=" font-weight:normal">
               ￥{{discountFacevalue?pirce():sumpric}}
             </span>
                {{isSecondPaymentText?priceText[1]:priceText[0]}}
@@ -169,12 +167,12 @@
   import {Toast}  from "mint-ui"
   import {formalDefray} from "@/components/savertype/js/payment"
   import { Indicator } from 'mint-ui';
-//  import searchCoupon from "@/components/couponList/searchCoupon"
+  import searchCoupon from "@/components/couponList/searchCoupon"
   var indexPath=window.location.href.indexOf("#/")+2,urlHref=window.location.href.substring(0,indexPath);
   export default {
-//        components:{
-//          searchCoupon
-//        },
+        components:{
+          searchCoupon
+        },
         data() {
             return {
               originalSum:0,
@@ -271,7 +269,13 @@
                 const data=res.data;
                 if(data.code==="0000"){
                   this.getUserInfoDiscount(); //获取优惠券列表
-                  this.$Toast("兑换成功")
+                  this.$Toast({
+                    message: '兑换成功',
+                    iconClass: 'mintui mintui-success'
+                  });
+                }else if(data.code==='3037'){
+                  this.exchangeText.value="";
+                  this.$Toast(data.error);
                 }else{
                   this.$Toast(data.error);
                 }
@@ -730,7 +734,9 @@
     left:0;
     background: rgba(0,0,0,.1);
   }
+
 }
+
 .serve_box_date{
   margin-top:0;
   margin-bottom:.2rem;
@@ -857,15 +863,17 @@
       }
     }
   }
+
   .hitch{
       margin:0;
   }
+  /*底部按钮 */
   .footer.submit_button{
       width:100%;
       position:fixed;
       bottom:0;
       left:0;
-    box-shadow:2/50rem 0px 8/50rem 6/50rem #d5d5d5;
+    box-shadow:2/50rem 0 8/50rem 6/50rem rgba(221,221,221,0.50);
     text-align: right;
       background: #FFFFFF;
       font-family: PingFangSC-Medium;
@@ -890,6 +898,7 @@
         margin-right:29/50rem;
         font-size: 34/50rem;
         color: #FFFFFF;
+        font-weight:normal;
         letter-spacing: 0;
       }
       >.amount{
@@ -1035,7 +1044,7 @@
   #remarks{
     border:none;
     margin-top:0;
-    border-top:1px solid #b0b0b0;
+    border-top:1px solid rgba(0,0,0,.1);
   }
   #remarks, .coupon{
     padding:0;

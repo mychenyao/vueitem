@@ -86,7 +86,10 @@ export default {
             this.dataList=[];
             this.getData("0",()=>{
               this.getData("2");
-              this.$Toast("兑换成功")
+              this.$Toast({
+                message: '兑换成功',
+                iconClass: 'mintui mintui-success'
+              });
             });
           }else{
             this.$Toast(data.error);

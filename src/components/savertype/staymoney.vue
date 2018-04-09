@@ -12,7 +12,7 @@
       </div>
       <!--师傅位置-->
       <!--师傅位置end-->
-      <div class="info">
+      <div class="info saver_title_list">
           <div class="saver_type">
             <div class="saver_title">
               服务类别：
@@ -199,7 +199,7 @@
                   v-model="value"
                   :options="options">
                 </mt-radio>
-                <textarea v-model="textValue" id="" cols="30" rows="10" v-if="value==='0'"></textarea>
+                <textarea v-model="textValue" id="" cols="30" rows="10" v-if="value==='0'" class="text_area"></textarea>
                 <div class="footer">
                   <div class="accounts_btn" @click="submit">确认取消</div>
                 </div>
@@ -812,6 +812,9 @@
         }
       }
     }
+    .saver_title_list{
+      padding-right:.6rem;
+    }
 
     .keep_container{
       background:#fff;
@@ -1032,8 +1035,10 @@
     width:686/50rem;
     margin:0;
     height:146/50rem;
+    display:block;
     margin:0 auto;
     margin-top:5px;
+    margin-bottom:5px;
     background: #D8D8D8;
     border-radius: 8/50rem;
     border:none;
@@ -1130,6 +1135,9 @@
       color: #FFFFFF;
       letter-spacing: 0;
     }
+  }
+  .text_area{
+    /*margin:0 auto;*/
   }
 </style>
 <style lang="less">

@@ -20,7 +20,6 @@
                 <div class="activity_bottom" :style="{backgroundImage:'url('+homeDataList.promotionC[0].image+')'}">
                       <h3>{{homeDataList.promotionC[0].name}}</h3>
                       <p>{{homeDataList.promotionC[0].remark}}</p>
-
                 </div>
               </a>
               </div>
@@ -32,12 +31,14 @@
       props:["homeDataList"],
         data() {
             return {
+
             }
         },
         methods: {
 
         },
         created() {
+
         }
     }
 </script>
@@ -56,6 +57,7 @@
         >.activity_center{
           overflow: hidden;
             >div{
+              text-align
               text-align: center;
               float:left;
           }

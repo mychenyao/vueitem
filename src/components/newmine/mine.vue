@@ -165,15 +165,17 @@
     }
     >h3{
       font-family:PingFangSC-Semibold;
-      font-size:44/50rem;
+      font-size:36/50rem;
       color:#fff;
-      margin-top:73/50rem;
+      margin-top:90/50rem;
       font-weight:normal;
+      margin-left:.3rem;
       /*opacity:0;*/
       transform:translateX(194/50rem);
     }
     >p{
-      line-height: 1em;
+      line-height: 2em;
+      margin-left:.3rem;
       transform:translateX(194/50rem);
       font-family:PingFangSC-Medium;
       font-size:28/50rem;

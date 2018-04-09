@@ -12,10 +12,12 @@
       </div>
       <div id="repaire_right">
             <ul id="repaire_right_list">
-                <v-touch tag="li"  v-for="(i,index2) in repair_right_list1"
-                v-on:tap="repair_listActive2(i,index2)"
-                :class="{repair_rightActive1:i.selector}">
-                    {{i.b}}
+                <v-touch tag="li"
+                         v-for="(item,index2) in repair_right_list1"
+                          :key="index2"
+                v-on:tap="repair_listActive2(item,index2)"
+                :class="{repair_rightActive1:item.selector}">
+                    {{item.b}}
                 </v-touch>
              </ul>
       </div>
@@ -124,7 +126,6 @@ export default {
     },
     repair_listActive2(i,index){
       //跟新对象内的数组数据
-
 
        this.$set(this.repair_right_list1[index],"selector",!this.repair_right_list1[index].selector);
      /*---------*/
