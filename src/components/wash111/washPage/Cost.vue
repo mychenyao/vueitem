@@ -111,15 +111,14 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       .costBox{
-        width: 680/50rem;
-        height: 100/50rem;
-        margin-left: 35/50rem;
+        width: 94%;
+        margin: 3%;
+        box-shadow: 0/50rem 8/50rem 0/50rem 0/50rem rgba(221,221,221,0.5);
         overflow-x: auto;
         ul{
           width: 1100/50rem;
           height: 100/50rem;
-          background:#f1f1f1;
-          box-shadow: 2/50rem 8/50rem 8/50rem 0/50rem rgba(221,221,221,0.5);
+          background:#FFFFFF;
           display: flex;
 
           li{
@@ -143,18 +142,20 @@ export default {
         width: 680/50rem;
         margin: 35/50rem;
         overflow: hidden;
+        
         li{
+          overflow: hidden;
           font-family:PingFangSC-Light;
           font-size:26/50rem;
           color:#000000;
           letter-spacing:0/50rem;
           text-align:center;
           height: 60/50rem;
-          padding: 0 16/50rem;
+          padding: 0 42/50rem;
           border: 1/50rem solid #c7c7cc;
           border-radius: 100/50rem;
           float: left;
-          margin: 16/50rem;
+          margin: 10/50rem;
           line-height: 60/50rem;
         }
         .liAction{
@@ -188,6 +189,7 @@ export default {
         border: 1/50rem solid #c7c7cc;
         overflow: hidden;
         border-bottom: 0;
+        border-top:0; 
         li{
           width:100%;
           background: #FFFFFF;
@@ -232,6 +234,7 @@ export default {
             span:nth-child(1){
               width:60%;
               text-align: left;
+              text-indent: 24/50rem;
             }
             span:nth-child(2), span:nth-child(3){
               width: 20%;

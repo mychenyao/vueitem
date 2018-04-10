@@ -46,7 +46,6 @@ export default {
       "numberJian":function(oldData,newData){
         this.repair_left_list.forEach((item,index)=>{
              item.beans.forEach((item1,index1)=>{
-                console.log(item1)
                if(oldData.labelId === item1.a){
                  item1.selector = false;
 //                 this.$set(this.repair_right_list1[index1],"selector",false);
@@ -55,7 +54,6 @@ export default {
         })
       },
       "isEmpty":function(newBoolean,oldBoolean){
-        console.log(oldBoolean)
               this.repair_left_list.forEach((item,index)=>{
                 item.beans.forEach((item1,index1)=>{
                   if(newBoolean == true){
@@ -74,9 +72,10 @@ export default {
   created(){
     //获取数据
     let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+this.$route.params.id;
-//       let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+"002";
       this.$http.get(url).then(res=>{
+        
       this.repair_left_list = res.data.result.beans;
+      document.title=res.data.result.b
       this.repair_left_list.forEach((v,i)=>{
       this.repair_left_list[i].selector=false;//给对象加个selector。
       this.repair_left_list[i].num=0;//给对象加个num。
