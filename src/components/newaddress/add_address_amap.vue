@@ -68,7 +68,6 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
             }
           }else if(this.indexId==="1"){
             if(!this.streetId||!this.iframe_address){
-              console.log(this.streetId,this.iframe_address);
               return Toast("请选择地址");
             }
           } else if(this.text.length>=60){
