@@ -217,13 +217,14 @@
                     location.reload();
                   },500)
             }else{
+               removerStorage("fullName");
               //有购买保存到setLocalStorage
               this.$store.commit("changeAddServerPath",this.$route.path);
               if(getLocalStorage("fullName")!=""&&getLocalStorage("fullName")[0].farterId!==this.$route.params.id){
                 removerStorage("fullName");   //如果发现一级分类的id和存储的id 不一致，就清除；
                 removerStorage("server");
               }
-              if(this.$store.state.paths==="o"){
+              if(this.$store.state.paths==="o"){  //o为其他路口进来  //n为添加服务进来
                   removerStorage("fullName");
                   this.$store.commit("changeUserInfoDiscountId","");
                   this.$store.commit("changeIsSuperposition",1);
@@ -277,13 +278,31 @@
     mounted(){
     },
     created(){
+
+      console.log(getLocalStorage("fullName"))
+      if(this.$store.state.paths === "o"){
+            removerStorage("fullName");
+      }else if(this.$store.state.paths === "n"){
+           this.carts = getLocalStorage("fullName");
+        console.log(this.carts)
+            this.carts.forEach((v,i)=>{
+
+               if(v.isSecondPayment == "1"){
+                 this.catsPice.push(v.price1);
+                  this.maxNnmber();
+               }else if(v.isSecondPayment == "0"){
+                 this.countPrice +=v.price2DiscountFee*size;
+                 this.yuanjia +=v.price2*size;
+               }
+            })
+      }
       //看头部是三个tab还是两个
      if(this.$route.params.id === "001" || this.$route.params.id === "009"){
         this.isShow1 = false;
      }else{
           this.isShow1 = true;
      }
-     
+
     }
 }
 </script>

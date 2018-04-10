@@ -39,7 +39,8 @@ export default {
           repair_rightStyle:0,
           repair_right_arrey:[], //保存去详情页面的数据
           repair_right_Show:false,
-          repair_list_index2:0 // 控制小圆点是否亮
+          repair_list_index2:0, // 控制小圆点是否亮
+          carts:[],
       }
   },
   watch:{//监听到0的数据。修改背景框
@@ -67,18 +68,57 @@ export default {
         if(newchoice == 0){
           this.repair_left_list[this.repair_list_index1].num = -1;
         }
-    }
+    },
+
+  },
+  mounted(){
+        this.repair_left_list.forEach((item,index)=>{
+          console.log(111111111111)
+          item.beans.forEach((item1,index1)=>{
+            console.log(33333333333333333)
+            this.carts.forEach((vItem,Iindex)=>{
+
+              if(vItem.labelId == item1.a){
+                console.log(vItem)
+                console.log(item1)
+                this
+                item1.selector = true;
+                this.$set(item.beans[inde1],"selector",!item1.selector)
+
+              }
+            })
+          })
+        })
+  },
+  updated(){
+
+
   },
   created(){
     //获取数据
+
     let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+this.$route.params.id;
       this.$http.get(url).then(res=>{
-        
+
       this.repair_left_list = res.data.result.beans;
       document.title=res.data.result.b
       this.repair_left_list.forEach((v,i)=>{
       this.repair_left_list[i].selector=false;//给对象加个selector。
       this.repair_left_list[i].num=0;//给对象加个num。
+// 购物车点击点击了添加服务
+        this.repair_left_list.forEach((item,index)=>{
+          item.beans.forEach((item1,index1)=>{
+            this.carts.forEach((vItem,Iindex)=>{
+
+              if(vItem.labelId == item1.a){
+                console.log(vItem.labelId)
+                console.log(item1.a)
+                console.log(item1)
+            this.$set(item.beans[index1],"selector",true)
+              }
+            })
+          })
+        })
 
       })
 
@@ -108,6 +148,13 @@ export default {
         })
       }
     });
+    console.log(this.$store.state.paths)
+    if(this.$store.state.paths === "o"){
+      removerStorage("fullName");
+    }else if(this.$store.state.paths === "n"){
+      this.carts = getLocalStorage("fullName");
+    }
+    console.log(this.repair_left_list)
 
 
   },
