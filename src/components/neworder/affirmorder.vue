@@ -1,5 +1,5 @@
 <template>
-    <div id="box" ref="box">
+    <div id="box" ref="box" >
        <div class="location_box address"  v-for="(item,index) in positionInfo" @click="addPosition">
          <!--<p class="border_image"></p>-->
          <p class="bottom"></p>
@@ -20,7 +20,6 @@
       </router-link>
 <!--服务时间 end -->
 
-<!--优惠券 start-->
   <div class="add_serve hitch" v-for="(item,index) in dataList" :key="index" v-if="dataList.length>0" :style="index===0?'border:none':''">
         <div class="addserve_tite">
           <div class="product_right" style="min-height:3rem;">
@@ -50,7 +49,7 @@
       </div>
 
 
-  <!--优惠券 start-->
+  <!--优惠券start-->
         <div  @click="isAlert=true" class="location_box serve_box_date coupon" v-if="selectorCouponList.length>0">
           <div class="content">
             优惠券
@@ -135,11 +134,14 @@
   v-model="sheetVisible">
 </mt-actionsheet>
 
-<!--优惠券 弹框 start-->
+<!--优惠券列表  弹框 start-->
 
       <div class="alert" v-if="isAlert" @click="isCanc" id="alert" style="background:#F1F1F1">
         <search-coupon :data="exchangeText" :callBackFun="exchange"></search-coupon>
-        <div  style="position:absolute;bottom:3.3rem;width:100vw;background:#fff;overflow-y: auto;height:74%;">
+        <div
+        	style="width:100vw;background:#fff;overflow-y: auto;max-height:70%;"
+          id="alert_coupon_container"
+        >
           <h3>请选择优惠券</h3>
             <ul :style="selectorCouponList.length>4?'height:10rem':'height:auto;'">
               <li v-for="(item,index) in selectorCouponList" :key="index" @click="selectorCoupon(item,index)" >
@@ -273,6 +275,7 @@
                     message: '兑换成功',
                     iconClass: 'mintui mintui-success'
                   });
+                  this.exchangeText.value=""
                 }else if(data.code==='3037'){
                   this.exchangeText.value="";
                   this.$Toast(data.error);
@@ -538,6 +541,8 @@
           }
         },
         created() {
+
+//			console.log()
 //          折扣价格计算暂时隐藏
           if(this.$route.query.labelId){   //判断是否是从登陆页面跳转过来，如果是，则获取url labelId 重新获取价格数据；如果不是，则直接从缓存获取数据；
             let token=getCookie(),
@@ -563,8 +568,11 @@
           }
         }
   }
+const body=document.querySelector("body")
+
 </script>
 <style scoped lang="less">
+
 /*//  -费用列表 start->*/
 .cost_container{
   width:100%;
@@ -994,6 +1002,10 @@
       margin-top:.3rem;
     }
   }
+  #alert_coupon_container{
+    position:absolute;
+    top:4.5rem;
+  }
 }
   #footer{
     width:100%;
@@ -1098,6 +1110,7 @@
 #address_linkmanDetails.selectorColor, #date_linkmanDetails.selectorColor{
   color:#000;
 }
+
 </style>
 
 

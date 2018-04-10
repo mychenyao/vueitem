@@ -23,6 +23,9 @@
     display: flex;
     height:168/50rem;
     align-content:center;
+    position:fixed;
+    top:0;
+    z-index: 999;
     -webkit-align-items:center;
     >.search_input{
       margin:0;

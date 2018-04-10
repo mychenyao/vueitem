@@ -1,7 +1,7 @@
 <template>
-        <div class="container_item" :class="className" v-if="!isShow.isShow" :style="!!className?'padding-top:.8rem':'padding-top:3rem;'" >
+        <div class="container_item" :class="className" style="padding-bottom:.08rem;" v-if="!isShow.isShow" :style="!!className?'padding-top:.8rem':'padding-top:.92rem'" >
           <h3 class="assortment_title">{{title}}</h3>
-          <ul class="assortment_box">
+          <ul class="assortment_box" >
             <li style="font-weight: normal" :style="!isPhone?'width:46.5%':''" v-for="(item,index) in dataList" :key="index" @click="selector(index,item.a,item,selectIndex,$event)" :class="{'selector':active==index}">
               {{item.b}}
             </li>
@@ -32,6 +32,7 @@
   .container_item{
     width:100%;
     text-align: center;
+    
     >.assortment_title{
       font-family:PingFangSC-Light;
       font-size:40/50rem;

@@ -26,8 +26,14 @@
             let token=getCookie();
             if(!token){return Toast("未能有效登陆")}
             if(this.text.trim()){
+            	const phoneNum = this.tel; //手机号码；
+            	if(phoneNum===undefined||phoneNum===""){
+            		return this.$Toast("请填写联系方式")
+            	}else if(!(/^1[34578]\d{9}$/.test(phoneNum))){
+            		return this.$Toast("手机号格式不正确")
+            	}
               let url=common.apidomain+"/feedback/savefeedback";
-              this.$http.post(url,{"content":this.text,"token":token}).then(res=>{
+              this.$http.post(url,{"content":this.text,"token":token,"phoneNum":phoneNum}).then(res=>{
                 let data=res.data.result;
                 if(data){
                    Toast(data);

@@ -32,6 +32,8 @@
     >
     </assortment-item>
     <div class="container_item third"
+    	
+    	style="padding-top:.5rem"
          :class="isPhone&&!!childrenType2&&retractAssortment.isShow?'openBox':'retract'"
          v-if="isPhone&&!!childrenType2&&retractAssortment.isShow">
         <h3 class="assortment_title">{{title[1]}}</h3>
@@ -60,6 +62,7 @@
 
 <!--家电分类模块 start-->
   <assortment-item
+  	style="padding-top:2.8rem;"
     :title="titleH"
     :active="i0"
     :isShow="retractAssortment"
@@ -70,7 +73,7 @@
   </assortment-item>
 
   <!-- 2级分类 -->
-  <div class="container_item third "  v-if="!isPhone&&!!childrenType1&&retractAssortment.isShow" :class="{'openBox':retractAssortment.isShow}">
+  <div class="container_item third "  v-if="!isPhone&&!!childrenType1&&retractAssortment.isShow" :class="{'openBox':retractAssortment.isShow}" style="padding-top:.5rem">
     <h3 class="assortment_title" >{{title[0]}}</h3>
     <ul class="assortment_box">
       <li v-for="(item,index) in childrenType1" :key="index" @click.stop="selectorTypeFun(index,item.a,item,1)" class="househol_d"  :class="{'selector_third animated_item':i1===index}" :style="item.isClass&&!(isKongtiao&&flagIstarges&&i1===index&&childrenType1)?'border-radius:2rem':''">
@@ -98,7 +101,7 @@
     </ul>
   </div>
     <!--<transition name="fade">-->
-      <div class="container_item third tags_box" v-if="isKongtiao&&flagIstarges&&!childrenType1">
+      <div class="container_item third tags_box" v-if="isKongtiao&&flagIstarges&&!childrenType1" style="padding-top:.5rem">
             <h3 class="assortment_title">具体故障</h3>
             <div class="tags_box_item">
               <h3>故障选择</h3>
