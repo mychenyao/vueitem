@@ -27,7 +27,7 @@ const staymoney = resolve => require(["@/components/savertype/staymoney"], resol
 const userProtocol = resolve => require(["@/components/login/userProtocol"], resolve) //用户协议
 const saverInfo = resolve => require(["@/components/order/saverInfo"], resolve) //用户协议
 const orderSuccPages =resolve => require(["@/components/orderSuccess/page"], resolve)
-const classify =resolve => require(["@/components/wash/wash1"], resolve)                       //师傅端 安卓 配件表
+const classify =resolve => require(["@/components/new_wash/wash1"], resolve)                       //师傅端 安卓 配件表
 const wechatDefray =resolve => require(["@/components/wechatDefray/wechatDefray"], resolve)
 const share =resolve => require(["@/components/share/share"], resolve)
 const userDraw =resolve => require(["@/components/share/userDraw"], resolve)

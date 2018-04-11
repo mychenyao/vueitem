@@ -2,11 +2,11 @@
   <div id="box">
   <!--seach 手动添加卷码 start-->
 <!---->
-    <search-coupon v-if="!isAlert" :data="exchangeText" :callBackFun="exchange"></search-coupon>
+    <search-coupon  :data="exchangeText" :callBackFun="exchange"></search-coupon>
 
   <!--seach 手动添加卷码 end-->
 
-   	<div class="keep_container" v-if="!isAlert">
+   	<div class="keep_container margin_top" v-if="!isAlert">
    		<ul>
 		    <router-link tag="li" to="/" v-for="(item,index) in dataList" :key="index" :class="{'background_image':item.serviceDiscount.discountState===3}">
 						<div class="left">
@@ -23,7 +23,7 @@
 		    </router-link>
 		  </ul>
    	</div>
-    <div class="alert" v-if="isAlert">
+    <div class="alert margin_top" v-if="isAlert">
       <img src="../../assets/images/wuyouhuij.png" alt="">
       <p>你现在没有可用优惠券哦！</p>
     </div>
@@ -91,6 +91,7 @@ export default {
                 iconClass: 'mintui mintui-success'
               });
             });
+            this.exchangeText.value=""
           }else{
             this.$Toast(data.error);
           }
@@ -99,6 +100,7 @@ export default {
     },
 // 兑换优惠券 end
     getData(state,callBack=null){
+//  	return;
       this.isAlert=false;
       if(!this.dataList.length){
         this.isAlert=true;
@@ -307,6 +309,8 @@ a{
   height:auto;
 }
 }
-
+.margin_top{
+	   margin-top:168/50rem;
+}
 
 </style>

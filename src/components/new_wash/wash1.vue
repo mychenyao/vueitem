@@ -173,7 +173,7 @@
               <div class="box" v-if="dataInfo.imageUrl!==undefined&&dataInfo.imageUrl" >
                 <img :src="dataInfo.imageUrl" alt="">
               </div>
-              <div class="server_describe" v-html="dataInfo.content">
+              <div class="server_describe" v-html="dataInfo.content" id="server_describe">
                    <!--  <p class="serve_scope">服务范围：<span>深圳</span></p>
                     <h4 class="flow_path"> 维修流程：</h4>
                     <span>
@@ -191,7 +191,6 @@
 <script>
   import { MessageBox } from 'mint-ui';
   import {setCookie,getCookie} from "../../js/cookie"
-  import common from "../../js/baseHttp"
   import {Toast} from "mint-ui"
   import { Indicator } from 'mint-ui';
   import {getSession,setSession,removerStorage,getLocalStorage,setLocalStorage} from "../../js/session"
@@ -521,36 +520,6 @@
               if(!data){
                 return;
               }
-//              if(this.dataPriceList[0].serviceInfo.isHighFees=="1"){
-//                var newArray=[];
-//                var newArrObj=[];
-//                      for(let i=0;i<this.dataPriceList[0].highAltitudeSettings.length;i++) {
-//                        newArray.push(this.dataPriceList[0].highAltitudeSettings[i].floorStart)
-//                      }
-//                      newArray.sort(this.sortNumber);
-//                      for(var k=0;k<newArray.length;k++){
-//                        for(var j=0;j<this.dataPriceList[0].highAltitudeSettings.length;j++){
-//                          if(newArray[k]==this.dataPriceList[0].highAltitudeSettings[j].floorStart){
-//                            newArrObj.push(this.dataPriceList[0].highAltitudeSettings[j])
-//                          }
-//                        }
-//                      }
-//                this.highAltitude=newArrObj;
-//              }
-//
-//              if(this.dataPriceList[0].serviceInfo.isSecondPayment==1){
-////                this.sum=this.dataPriceList[0].serviceInfo.price1
-//              }else if(this.dataPriceList[0].serviceInfo.isSecondPayment==0){
-//                var newArr=[];
-//                for(var i=0;i<data.length;i++){
-////                  newArr.push(data[i].serviceInfo.price2DiscountFee);
-//                }
-//                Array.max = function( array ){
-//                  return Math.max.apply( Math, array );
-//                };
-////                this.sum = Array.max(newArr)+this.dataPriceList[0].serviceInfo.price1
-//              }
-    ///////////////////////////////////////////////////////////////////////////////
 //              价格计算 start
                 var price=0;
                 if(this.dataPriceList.length!==0){
@@ -615,6 +584,14 @@
         }
     }
 </script>
+<style>
+	#server_describe{
+    width:100%;
+  }
+  #server_describe img{
+    width: 100%;
+  }
+</style>
 <style scoped lang="less">
   .alert{
     width:560/50rem;
@@ -812,7 +789,7 @@
 
 
     }
-    /////////////////
+  
   >.small_left{
     width:84/50rem;
     height:100%;

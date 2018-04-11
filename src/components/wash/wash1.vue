@@ -170,10 +170,7 @@
     <transition name="fad">
             <div class="container" v-if="dataInfo">
               <!--<h3 class="classify_title price_title">配件价格表</h3>-->
-              <div class="box" v-if="dataInfo.imageUrl!==undefined&&dataInfo.imageUrl" >
-                <img :src="dataInfo.imageUrl" alt="">
-              </div>
-              <div class="server_describe" v-html="dataInfo.content">
+              <div class="server_describe" v-html="dataInfo.content" id="server_describe">
                    <!--  <p class="serve_scope">服务范围：<span>深圳</span></p>
                     <h4 class="flow_path"> 维修流程：</h4>
                     <span>
@@ -615,6 +612,14 @@
         }
     }
 </script>
+<style>
+	#server_describe{
+    width:100%;
+  }
+  #server_describe img{
+    width: 100%;
+  }
+</style>
 <style scoped lang="less">
   .alert{
     width:560/50rem;

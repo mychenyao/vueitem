@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="footer" v-show="!isSelectOption&&!isSelectStreet" @click="meory(isStreet,text,position)">
-        <div class='accounts_btn' >
+        <div class='accounts_btn'>
           保存
         </div>
       </div>
@@ -68,7 +68,6 @@ import {positionSeesionFun,positionEdit} from "./positionFun"
             }
           }else if(this.indexId==="1"){
             if(!this.streetId||!this.iframe_address){
-              console.log(this.streetId,this.iframe_address);
               return Toast("请选择地址");
             }
           } else if(this.text.length>=60){
