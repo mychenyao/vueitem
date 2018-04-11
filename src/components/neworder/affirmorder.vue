@@ -568,8 +568,6 @@
           }
         }
   }
-const body=document.querySelector("body")
-
 </script>
 <style scoped lang="less">
 
