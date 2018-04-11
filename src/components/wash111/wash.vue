@@ -279,12 +279,10 @@
     },
     created(){
 
-      console.log(getLocalStorage("fullName"))
       if(this.$store.state.paths === "o"){
             removerStorage("fullName");
       }else if(this.$store.state.paths === "n"){
            this.carts = getLocalStorage("fullName");
-        console.log(this.carts)
             this.carts.forEach((v,i)=>{
 
                if(v.isSecondPayment == "1"){
@@ -558,7 +556,7 @@
        right: 0.58rem;
       p{
         width: 320/50rem;
-        margin: 3% 10% 0 10%;
+        margin: 6% 10% 0 10%;
         border-radius:100/50rem;
         text-align: center;
         line-height:90/50rem;

@@ -29,7 +29,6 @@ import {setCookie,getCookie} from "@/js/cookie"
 export default {
   props:["numberJian","isEmpty","choice"],
   data(){
-    console.log(this.numberJian,"shjahsjahjshaj")
       return{
           repair_left_list:[],//维修主页面左边的列表
           repair_list_index: 0,//维修主页面左边的列表里面b的active
@@ -72,27 +71,9 @@ export default {
 
   },
   mounted(){
-        this.repair_left_list.forEach((item,index)=>{
-          console.log(111111111111)
-          item.beans.forEach((item1,index1)=>{
-            console.log(33333333333333333)
-            this.carts.forEach((vItem,Iindex)=>{
 
-              if(vItem.labelId == item1.a){
-                console.log(vItem)
-                console.log(item1)
-                this
-                item1.selector = true;
-                this.$set(item.beans[inde1],"selector",!item1.selector)
-
-              }
-            })
-          })
-        })
   },
   updated(){
-
-
   },
   created(){
     //获取数据
@@ -111,10 +92,7 @@ export default {
             this.carts.forEach((vItem,Iindex)=>{
 
               if(vItem.labelId == item1.a){
-                console.log(vItem.labelId)
-                console.log(item1.a)
-                console.log(item1)
-            this.$set(item.beans[index1],"selector",true)
+                    this.$set(item.beans[index1],"selector",true)
               }
             })
           })

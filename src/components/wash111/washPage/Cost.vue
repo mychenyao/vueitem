@@ -2,7 +2,7 @@
    <div id="cost">
       <div id="cost1" >
        <div class="costBox">
-            <ul id="cost_list">
+            <ul id="cost_list" ref="dom">
               <li v-for="(item,index) in costList"
               @click="cost_listClick(item.beans,index)"
               :class="{cost_listActive:cost_listIndex==index}">{{item.b}}</li>
@@ -55,13 +55,28 @@ export default {
          moneyOne:[],  //服务费
       }
   },
+  mounted(){
+
+  },
+  updata(){
+      console.log(this.costList)
+  },
   created(){
       //获取数据
       let url=this.$common.apidomain+'/articleinfo/findlabelbusinessbyflabel?id='+this.$route.params.id;
       this.$http.get(url).then(res=>{
           this.costList = res.data.result.beans;
           this.cost_listClick(res.data.result.beans[0].beans,0);
-          // console.log(res.data.result.beans)
+           console.log(res.data.result.beans)
+        if(res.data.result.beans.length <= 4){
+             this.$refs.dom.style.width = "100%";
+        }else if(res.data.result.beans.length > 4 &&res.data.result.beans.length <=7){
+          this.$refs.dom.style.width = "150%";
+         }else if(res.data.result.beans.length > 8 &&res.data.result.beans.length <=10){
+           this.$refs.dom.style.width = "200%";
+        }else if(res.data.result.beans.length > 11 &&res.data.result.beans.length <=13){
+          this.$refs.dom.style.width = "250%";
+        }
       })
   },
   methods:{
@@ -111,9 +126,8 @@ export default {
       overflow-x: hidden;
       overflow-y: auto;
       .costBox{
-        width: 94%;
-        margin: 3%;
-        box-shadow: 0/50rem 8/50rem 0/50rem 0/50rem rgba(221,221,221,0.5);
+        width: 100%;
+        box-shadow: 2/50rem 0/50rem 8/50rem 6/50rem rgba(221,221,221,0.50);
         overflow-x: auto;
         ul{
           width: 1100/50rem;
@@ -142,7 +156,7 @@ export default {
         width: 680/50rem;
         margin: 35/50rem;
         overflow: hidden;
-        
+
         li{
           overflow: hidden;
           font-family:PingFangSC-Light;
@@ -189,7 +203,7 @@ export default {
         border: 1/50rem solid #c7c7cc;
         overflow: hidden;
         border-bottom: 0;
-        border-top:0; 
+        border-top:0;
         li{
           width:100%;
           background: #FFFFFF;
