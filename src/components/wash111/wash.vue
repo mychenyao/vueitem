@@ -291,8 +291,8 @@
                  this.catsPice.push(v.price1);
                   this.maxNnmber();
                }else if(v.isSecondPayment == "0"){
-                 this.countPrice +=v.price2DiscountFee*size;
-                 this.yuanjia +=v.price2*size;
+                 this.countPrice +=v.price2DiscountFee*v.size;
+                 this.yuanjia +=v.price2*v.size;
                }
             })
       }
