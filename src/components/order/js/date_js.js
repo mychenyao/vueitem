@@ -1,5 +1,9 @@
 export function changeDate(_this){
-	var day1,yue,ri,s1,day2,s2,day3,s3,day4,s4,day5,s5,str="",i=0;
+	var day1,yue,ri,s1,day2,s2,day3,s3,day4,s4,day5,s5,
+    day6,s6,
+    day7,s7,
+    day8,s8,
+    str="",i=0;
     day1 =new Date();
           _this.current=day1;
            yue=day1.getMonth()+1;
@@ -35,18 +39,37 @@ export function changeDate(_this){
      	 s5=day5.getFullYear()+"-"
            + ((day5.getMonth()+1)>9?(day5.getMonth()+1):0+""+(day5.getMonth()+1))+
             "/" + (day5.getDate()>9?day5.getDate():0+""+(day5.getDate()) )
+
+          day6=new Date();
+          day6.setTime(day6.getTime()+120*60*60*1000)
+          s6=day6.getFullYear()+"-"+((day6.getMonth()+1)>9?(day6.getMonth()+1):0+""+(day6.getMonth()+1))+"/"+ (day6.getDate()>9?day6.getDate():0+""+(day6.getDate()) )
+
+
+          day7=new Date();
+          day7.setTime(day7.getTime()+144*60*60*1000);
+          s7=day7.getFullYear()+"-"+((day7.getMonth()+1)>9?(day7.getMonth()+1):0+""+(day7.getMonth()+1))+"/"+ (day7.getDate()>9?day7.getDate():0+""+(day7.getDate()) )
+
               _this.timeList[0].time=s1.substring(5);
               _this.timeList[1].time=s2.substring(5);
+
               _this.timeList[2].name=getDat(day3.getDay());
               _this.timeList[2].time=s3.substring(5);
+
               _this.timeList[3].name=getDat(day4.getDay());
               _this.timeList[3].time=s4.substring(5);
+
               _this.timeList[4].name=getDat(day5.getDay());
               _this.timeList[4].time=s5.substring(5);
 
-          function getDat(week){
+              _this.timeList[5].name=getDat(day6.getDay());
+              _this.timeList[5].time=s6.substring(5);
 
-              if (week == 0) {
+              _this.timeList[6].name=getDat(day7.getDay());
+              _this.timeList[6].time=s7.substring(5);
+
+  function getDat(week){
+
+            if (week == 0) {
                       str = "周日";
               } else if (week == 1) {
                       str = "周一";
@@ -63,42 +86,30 @@ export function changeDate(_this){
               }
               return str;
           }
+
             _this.date.push(s1);
             _this.date.push(s2);
             _this.date.push(s3);
             _this.date.push(s4);
             _this.date.push(s5);
+            _this.date.push(s6);
+            _this.date.push(s7);
              for(i=0;i<21;i++){
               _this.isErr.push(true);
             }
-
 }
 export let dateList=[
-                "09:00",
-                "09:30",
-                "10:00",
-                "10:30",
-                "11:00",
-                "11:30",
-                "12:00",
-                "12:30",
-                "13:00",
-                "13:30",
-                "14:00",
-                "14:30",
-                "15:00",
-                "15:30",
-                "16:00",
-                "16:30",
-                "17:00",
-                "17:30",
-                "18:00",
-                "18:30",
-                "19:00",
-                "19:30",
-                "20:00",
-                "20:30",
-                "21:00",
+                "09:00~10:00",
+                "10:00~11:00",
+                "11:00~12:00",
+                "12:00~13:00",
+                "13:00~14:00",
+                "14:00~15:00",
+                "15:00~16:00",
+                "16:00~17:00",
+                "17:00~18:00",
+                "18:00~19:00",
+                "19:00~20:00",
               ];
 export function computePrice(_this){
   let price=0,newArrPier=[];

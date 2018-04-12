@@ -33,6 +33,7 @@
     </div>
 </template>
 <script>
+//  import common from "../../js/baseHttp"
   import {setLocalStorage,removerStorage,setSessionUserInfo} from "@/js/session"
   import {setCookie,getCookie} from "../../js/cookie"
   import { Indicator } from 'mint-ui';
@@ -147,11 +148,11 @@
     margin-top:.5rem;
     >.order_number{
       font-family: PingFangSC-Regular;
-      font-size:24/50rem;
+      font-size:26/50rem;
       color: #9B9B9B;
-      height:60/50rem;
+      height:70/50rem;
       padding:0 32/50rem;
-      line-height:60/50rem;
+      line-height:70/50rem;
       font-weight: normal;
       letter-spacing: 0;
       >.status{
@@ -160,14 +161,17 @@
       }
     }
     .cause_top{
-      margin-bottom:2%;
+      /*margin-bottom:2%;*/
       color: #4A4A4A;
-      padding-right:2rem;
+      /*padding-right:2rem;*/
       letter-spacing: 0;
+      width:11.9rem;
+      margin-top:46/50rem;
+      display: inline-block;
       .mui-badge,.cause_type{
         background:none;
         font-family: PingFangSC-Regular;
-        font-size: 28/50rem;
+        font-size: 34/50rem;
 
       }
       > .mui-badge{
@@ -182,21 +186,29 @@
       font-size: 28/50rem;
       color: #4A4A4A;
       border-bottom:1px solid rgba(230,230,230,0.50);
-      padding:30/50rem 34/50rem;
+      padding:5/50rem 34/50rem;
       letter-spacing: 0;
+      padding-top:10/50rem;
+      /*<!--max-height:160/50rem;-->*/
+      /*<!--height:160/50rem;-->*/
       >.cause{
         letter-spacing: 0;
-        /*overflow: hidden;*/
+        overflow: hidden;
         height:auto;
+        line-height: 2.2em;
         >.cause_name{
           float:left;
+          max-width:12rem;
+          padding-top:.3rem;
+          margin-bottom:.6rem;
+          line-height: 1.5em;
         }
         >.sum{
           float:right;
         }
         >.cause_name,.sum{
           color: #C8C8CB;
-          font-size: 22/50rem;
+          font-size: 30/50rem;
           font-family: PingFangSC-Regular;
 
           letter-spacing: 0;
@@ -222,12 +234,13 @@
       overflow: hidden;
       position:relative;
       width:12rem;
+      line-height: 41/50rem;
       >p{
-        font-size:22/50rem;
+        font-size:32/50rem;
         color:#9B9B9B;
         text-align: right;
         >.defray_price{
-          font-size: 28/50rem;
+          font-size: 34/50rem;
           color: #000;
           letter-spacing: 0;
         }

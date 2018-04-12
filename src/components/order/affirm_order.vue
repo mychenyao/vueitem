@@ -58,6 +58,7 @@
         </div>
       </div>
     </div>
+
     <!--优惠券 start-->
     <div style="border-top:1px solid #ebebeb;" @click="isAlert=true" class="location_box serve_box_date coupon" v-if="selectorCouponList.length>0">
       <b class="position_icon tate"></b>
@@ -72,7 +73,7 @@
       <b class="position_icon tate remark"></b>
       <div class="content">
         <span class="tip">备注 :</span>
-        <input class="remarks" placeholder="(选填)" type="text" v-model="remark"  @change="rema(remark)"></input>
+        <input class="remarks" placeholder="(选填)" type="text" v-model="remark"  @change="rema(remark)"/>
       </div>
     </div>
 
@@ -381,18 +382,18 @@
         }
       },
       sumpir(){
-        let price=0,newArrPier=[],originalSum=0,price2DiscountFavorableFee=0;
+        let price=0,newArrPier=[],originalSum=0,price2DiscountFavorableFee=0,
+            computeOriginalSum=e=>originalSum+=(e.price2-0)*(e.size-0);     //计算总服务费
         if(this.dataList.length===0)return this.sumpric=0;
         this.dataList.forEach((e,i)=>{
           if(e.isSecondPayment==="0"){  //一次付款；       1二次付款   0一次付款
             if(this.isSuperposition===1){
               price+=e.price2DiscountFee*(e.size-0);
               price2DiscountFavorableFee+=e.price2DiscountFavorableFee*(e.size-0);
-              originalSum+=e.price2*(e.size-0);
+              computeOriginalSum(e)
             }else{
               price+=(e.price2-0)*(e.size-0);
-              price2DiscountFavorableFee+=e.price2DiscountFavorableFee*(e.size-0);
-              originalSum+=(e.price2-0)*(e.size-0);
+              computeOriginalSum(e)
             }
           }else if(e.isSecondPayment==="1"){
             newArrPier.push(e.price1);
@@ -414,13 +415,6 @@
         }else{
           this.sumpric=price
         }
-//            let priceStr=(data[0].serviceInfo.price2-data[0].serviceInfo.price2DiscountFee).toString();
-//            if(priceStr.indexOf(".")!==-1){
-//              this.amount=priceStr.substring(0,priceStr.indexOf(".")+3);
-//            }else{
-//              this.amount=priceStr;
-//            }
-//            if(!priceStr){this.amount=0}
       },
       isShow(){
         if (getLocalStorage("title")[0]==="手机品牌"){return false}else{return true}

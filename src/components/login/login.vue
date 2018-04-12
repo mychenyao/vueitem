@@ -80,7 +80,8 @@
           let url =`${this.$common.apidomain}/authCodeInfo/confirmLogin`;
           let param={
             "phoneNum":this.tel,"authCode":this.test,
-            "cityId":cityId,"openId":getOpenID(),
+            "cityId":cityId,
+            "openId":getOpenID(),
             "relevanceType":Request.relevanceType,
             "relevanceKey":Request.relevanceKey
             };

@@ -1,7 +1,7 @@
 <template>
     <div id="box">
       <router-link tag="div" class="container" v-for="(item,index) in dataList" :key="index" :to="item.path">
-        <p> {{item.sum}} <span>{{item.unit}}</span> </p>
+        <p> {{item.sum}}  </p>
         <p class="name">{{item.name}}</p>
       </router-link>
     </div>
@@ -33,7 +33,6 @@
   padding-bottom:34/50rem;
   .container{
     padding-top:10/50rem;
-    border-right:1px solid #ededed;
     text-align: center;
     flex:1;
     >p{
@@ -45,10 +44,9 @@
       }
     }
     >.name{
-      font-size: 28/50rem;
-      color: #4A4A4A;
+      font-size:26/50rem;
+      color:#888;
     }
-
   }
   >.container:active{
     background: #F8F8F8;

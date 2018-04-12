@@ -8,23 +8,29 @@
     </div>
 <!-- del(index,item.id) -->
     <div class="position_box">
-      <mt-cell-swipe v-for="(item,index) in list" :key="index"
-        :right="[
-             {
-                content: '删除',
-                style: { background: '#eef3f4', color: '#EB5312' },
-                handler:()=>delAlert(index,item.id)
-                }
-            ]">
-        <b :class="{select:(isSelector==index)||positionSelelector(item.id)}" v-show="isSelector"></b>
-        <div class="user_info" @click="select(index,item)">
-          <div class="suer_name">{{item.linkmanName}}</div>
-          <div class="tel">{{item.linkmanPhoneNum}}</div>
-          <div class="location">{{item.linkmanDetails}}</div>
+        <div v-for="(item,index) in list" class="position_box_item" @click="select(index,item)">
+            <b class="select" v-show="isSelector==index||positionSelelector(item.id)"></b>
+            <div class="position_box_item_top">
+                <p class="name">
+                  {{item.linkmanName}}
+                </p>
+                <p class="tel">
+                  {{item.linkmanPhoneNum}}
+                </p>
+            </div>
+            <div class="position_box_item_content">
+              {{item.linkmanDetails}}
+            </div>
+            <div class="position_box_item_bottom">
+                <div class="position_box_item_bottom_del" @click.stop="delAlert(index,item.id)">
+                  删除
+                </div>
+
+                <div class="position_box_item_bottom_revise" @click.stop="modificationAddress(item,index)">
+                  修改
+                </div>
+            </div>
         </div>
-        <div  class="revise_position" @click="modificationAddress(item,index)">
-        </div>
-      </mt-cell-swipe>
     </div>
     <div class="footer" v-show="(list.length>0)" @click="addSaverAddress">
       <router-link class="accounts_btn" to="/add_address/0">添加服务地址</router-link>
@@ -38,7 +44,6 @@
   </div>
 </template>
 <script>
-//import common from "../../js/baseHttp"
 import {setCookie,getCookie} from "../../js/cookie"
 import {Toast} from "mint-ui"
 import {removerStorage,getLocalStorage,setLocalStorage} from "../../js/session"
@@ -72,8 +77,8 @@ import { Indicator } from 'mint-ui';
         this.sheetVisible=true
       },
       positionSelelector(id){
-          if(getLocalStorage("OPTION").length>0&&getLocalStorage("OPTION")[0].id===id){
-              return true;
+        if(getLocalStorage("OPTION").length>0&&getLocalStorage("OPTION")[0].id===id){
+            return true;
           }else{
             return false;
           }
@@ -120,7 +125,6 @@ import { Indicator } from 'mint-ui';
           this.$store.commit("addPosition","/address");
         },800)
       },
-
       getData(){
         if(!getCookie()){
           this.$router.push({path:"/login"});
@@ -133,9 +137,10 @@ import { Indicator } from 'mint-ui';
             Indicator.close();
             this.list=data.result;
             let currentPath=this.$route.path,
-              loginPath=this.$store.state.loginPath,previPosition=this.$store.state.previPosition
+              loginPath=this.$store.state.loginPath,previPosition=this.$store.state.previPosition;
             if((loginPath!==currentPath)&&(loginPath.indexOf("/affirmorder")===-1&&loginPath.indexOf("/affirm_order")===-1)){
-              this.$store.commit("changeLoginPath","/address");
+
+                 this.$store.commit("changeLoginPath","/address");
               if(!this.$store.state.editObjDataRess){   //判断用户是编辑还是 新增过来的  如果数据为 null 则是新增；else 是编辑；
                     let len=data.result.length-1,newArrayIds=this.$store.state.addressObjData.map((v,i)=>{
                           return v.id;
@@ -144,7 +149,7 @@ import { Indicator } from 'mint-ui';
                        });
                 for(let i=0;i<currentArrayIds.length;i++){
                        if(currentArrayIds[i]!=newArrayIds[i]){
-                            this.select(i,this.list[i])
+                            this.select(i,this.list[i]);
                             return;
                       }
                 }
@@ -160,7 +165,6 @@ import { Indicator } from 'mint-ui';
       }
     },
     created() {
-
         this.getData();
     }
   }
@@ -189,7 +193,7 @@ import { Indicator } from 'mint-ui';
           margin:0 auto;
           margin-top:.8rem;
           text-align:center;
-          color: #FFFFFF;
+          color: #FFF;
           line-height:88/50rem;
           letter-spacing: 0;
         }
@@ -201,7 +205,84 @@ import { Indicator } from 'mint-ui';
         }
       }
       >.position_box{
-         /*padding-top:.5rem;*/
+        >.position_box_item{
+          margin-bottom:10/50rem;
+          background:#fff;
+          position:relative;
+          >.select{
+            position:absolute;
+            left:0;
+            top:0;
+            background:url(../../assets/images/sect.png) center center no-repeat;
+            background-size:100% 100%;
+            width:61/50rem;
+            height:61/50rem;
+          }
+          >.position_box_item_top{
+            overflow: hidden;
+            padding:0 46/50rem;
+            padding-top:.5rem;
+            >.name, >.tel{
+              font-family:PingFangSC-Regular;
+              font-size:32/50rem;
+              color:#000;
+              line-height: 2em;
+              float:left;
+            }
+            >.tel{
+              float:right;
+            }
+          }
+          >.position_box_item_content{
+            margin:0 46/50rem;
+            padding-right:42/50rem;
+            font-family:PingFangSC-Regular;
+            font-size:30/50rem;
+            line-height: 1.5em;
+            color:#000;
+            border-bottom:1px solid #b0b0b0;
+            /*margin:0 .4rem;*/
+            padding-bottom:.7rem;
+          }
+          >.position_box_item_bottom{
+            overflow: hidden;
+            padding:.5rem 0;
+            .position_box_item_bottom_revise, .position_box_item_bottom_del{
+              font-family:PingFangSC-Regular;
+              font-size:28/50rem;
+              color:#888;
+              float:right;
+              text-align: center;
+              line-height:56/50rem ;
+              height:56/50rem;
+              margin-right:.3rem;
+              &:after{
+                content:"";
+                float:left;
+                margin-right:.2rem;
+                vertical-align: middle;
+                transform:translateY(40%);
+                background:url(../../assets/images/deit_address.png) center center no-repeat;
+                background-size:100% 100%;
+                width:27/50rem;
+                height:31/50rem;
+              }
+            }
+            >.position_box_item_bottom_del{
+                margin-right:.9rem;
+              &:after{
+                background:url(../../assets/images/delete_address.png) center center no-repeat;
+                background-size:100% 100%;
+                width:29/50rem;
+              }
+            }
+          }
+        }
+
+
+
+
+
         >.mint-cell-swipe{
             height:160/50rem;
             position: relative;
@@ -301,18 +382,21 @@ import { Indicator } from 'mint-ui';
       >.footer {
           width: 100%;
           position: fixed;
-          bottom: 0;
+          bottom: 45/50rem;
           left: 0;
           height: 98/50rem;
           line-height: 98/50rem;
-          background: #FFFFFF;
+          background: transparent;
           font-family: PingFangSC-Medium;
           color: #EB5312;
           letter-spacing: 0;
+          padding:0 26/50rem;
           > .accounts_btn {
             height: 100%;
             display: inline-block;
-            background: #EB5312;
+            background: transparent;
+            background-image:linear-gradient(-63deg, #ef6a1c 0%, #ea5413 99%);
+            border-radius:2rem;
             width:100%;
             text-align: center;
             font-family: PingFangSC-Regular;

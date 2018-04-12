@@ -10,8 +10,6 @@
 
     <Cost v-if="tabIndex==1"  v-show="isShow1"></Cost>
     <Service v-if="tabIndex==2" ></Service>
-
-
     <div id="tabFoot">
       <div id="tabFoot_detail"  v-show="isShow">
           <div id="shown" @click="showno">

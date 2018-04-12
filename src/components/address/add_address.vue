@@ -1,61 +1,53 @@
 <template>
+  <div>
     <div id="box">
-      <!--<mt-field label="联系人" placeholder="请输入用户名" ></mt-field>-->
-      <!--<mt-field label="手机" placeholder="请输入手机号" type="tel"></mt-field>-->
       <div class="input_box">
         <div class="content">
           <div class="contacts">联系人</div>
-          <input class="user_name" type="text" v-model="name" @blur="testName(name)" @focus="clearPositio('1')">
+          <input class="user_name" type="text" placeholder="请输入联系人" v-model="name" @blur="testName(name)" @focus="clearPositio('1')">
         </div>
         <div class="content">
-          <div class="contacts">手机</div>
-          <input class="user_name" @blur="telTest(tel)" type="tel" v-model="tel" @focus="clearPositio('1')">
+          <div class="contacts">手机号</div>
+          <input class="user_name" @blur="telTest(tel)" placeholder="请输入联系人手机号" type="tel" v-model="tel" @focus="clearPositio('1')">
         </div>
         <div class="content"  @click="select">
-          <div class="contacts">地区</div>
-          <p class="user_name">{{position}}</p>
-          <div class="select1">请选择 &nbsp;<b></b> </div>
-        </div>
-        <div class="content" @click="selectStreet">
-          <div class="contacts">街道</div>
-          <p class="user_name" v-text="isStreet"></p>
-          <div class="select1">请选择  &nbsp;<b></b> </div>
+          <div class="contacts " style="letter-spacing:0">地&nbsp;&nbsp;&nbsp;&nbsp;址</div>
+          <!--<p class="user_name">{{position}}</p>-->
+          <div class="user_name">
+            {{iframe_address}}
+          </div>
+          <div class="select1">定位
+            <!--&nbsp;<b></b>-->
+          </div>
         </div>
         <div class="content replenish">
-           <textarea @focus="clearPositio('1')" class="user_name textArea" @change="importText" v-model="text" @keyup="testText(text)"  placeholder="请补充地址信息，如5号楼4单元26号"></textarea>
+           <textarea @focus="clearPositio('1')" class="user_name" @change="importText" v-model="text" @keyup="testText(text)"  placeholder="请补充地址信息，如5号楼4单元26号"></textarea>
         </div>
-      </div>
-      <div class="select_option" v-if="isSelectOption">
-        <div class="success_res">
-          <div class="cancel"  @click="clearPositio">取消</div>
-          <div class="success" @click="isShowPosition">完成</div>
-        </div>
-        <mt-picker :slots="slots" @change="onValuesChangePosition"></mt-picker>
-      </div>
-      <div class="select_option" v-if="isSelectStreet">
-        <div class="success_res">
-          <div class="cancel"  @click="clearStreet('2')">取消</div>
-          <div class="success" @click="selectorStreet">完成</div>
-        </div>
-        <mt-picker :slots="slotsStreet" @change="onValuesChangeStreet"></mt-picker>
       </div>
       <div class="footer" v-show="!isSelectOption&&!isSelectStreet" @click="meory(isStreet,text,position)">
-        <div class='accounts_btn' >
+        <div class='accounts_btn'>
           保存
         </div>
       </div>
     </div>
+
+    <!--lee s-->
+      <div class="iframe_box"  id="iframe_box" v-if="iframe_show"  @click="iframe_show_close">
+        <div class="iframe_back" @click.stop="iframe_show_close"></div>
+        <iframe src="../../../static/addres.html" frameborder="0" id="iframe1" @click="iframe_show_open"></iframe>
+      </div>
+    <!--lee e-->
+
+  </div>
 </template>
 <script>
 
-import {positionSeesionFun} from "./positionFun"
+import {positionSeesionFun,positionEdit} from "./positionFun"
 //  import slider from 'slider'// 引入slider组件
   import {Toast} from "mint-ui"
   import { Indicator } from 'mint-ui';
-
   import {setCookie,getCookie} from "@/js/cookie"
   import {getSessionUserInfo} from "@/js/session"
-//  import common from "@/js/baseHttp";
   var area=[];//区级数据；
   var province=[]; //省级数据
   var city=[]; //市级数据
@@ -64,22 +56,27 @@ import {positionSeesionFun} from "./positionFun"
   export default {
     methods: {
       meory(a,b,c){
-          if(!(/^1[34578]\d{9}$/.test(this.tel))){
+        if(!(/^1[34578]\d{9}$/.test(this.tel))){
             Toast("手机号格式不正确");
             return
           }else if(!(/^[0-9a-zA-Z\u4e00-\u9fa5_]{1,20}$/.test(this.name))){
-            Toast("用户名格式不正确");
+            Toast("联系人格式不正确");
             return
-          }else if(this.text.length>=60){
+          }else if(this.indexId==="0"){     //this.indexId   判断是新增还是修改 0是新增  1是修改
+            if(!this.getCurrentPosition.addressComponent||!this.iframe_address){   //getCurrentPosition.addressComponent 高德返回参数   iframe_address  地址名称
+              return Toast("请选择地址");
+            }
+          }else if(this.indexId==="1"){
+            if(!this.streetId||!this.iframe_address){
+              return Toast("请选择地址");
+            }
+          } else if(this.text.length>=60){
             Toast("详细地址描述不得多于60个字符");
             return
-          }else if(!a||!b||!c){
-            Toast("信息不完整");
-            return;
-          }else if(!this.streetId){
-            this.isStreet='';
-            Toast("请选择选择街道");
-            return;
+          }
+          if(this.text===undefined||this.text===""){
+            Toast("请填写详细地址信息");
+            return
           }
         //保存
         Indicator.open('正在保存');
@@ -88,23 +85,46 @@ import {positionSeesionFun} from "./positionFun"
           pams={"linkmanName":this.name,"linkmanPhoneNum":this.tel,"linkmanAddress":this.text,
             "linkmanAreaId":this.streetId,
             "id":this.id,
+            "linkmanBuilding":this.iframe_address,
+            "lon":this.location.lng?this.location.lng:"",
+            "lat":this.location.lat?this.location.lat:"",
+            "adcode":this.getCurrentPosition?this.getCurrentPosition.addressComponent.adcode:"",
+            "towncode":this.isGetTowncode(),
+            "citycode":this.getCurrentPosition?this.getCurrentPosition.addressComponent.citycode:"",
+            "township":this.getCurrentPosition&&this.getCurrentPosition.addressComponent.township.length?this.getCurrentPosition.addressComponent.township:"",
             "token":token};
-          url=common.apidomain+"/userSite/updateUserSite";
-        }else{                                    //添加地址
+          url=this.$common.apidomain+"/userSite/updateUserSite";
+        }else{ //添加地址
           pams={"linkmanName":this.name,"linkmanPhoneNum":this.tel,"linkmanAddress":this.text,
-            "linkmanAreaId":this.streetId,
+//            "linkmanAreaId":this.streetId,
+            "citycode":this.getCurrentPosition?this.getCurrentPosition.addressComponent.citycode:"",
+           "township":this.getCurrentPosition&&this.getCurrentPosition.addressComponent.township.length?this.getCurrentPosition.addressComponent.township:"",
+            "adcode":this.getCurrentPosition.addressComponent.adcode,
+            "towncode":typeof this.getCurrentPosition.addressComponent.towncode==="object"?"":this.getCurrentPosition.addressComponent.towncode,
+            "lon":this.location.lng,
+            "lat":this.location.lat,
+            "linkmanBuilding":this.iframe_address,
             "token":token};
-          url=common.apidomain+"/userSite/saveUserSite";
+          url=this.$common.apidomain+"/userSite/saveUserSite";
         }
         this.$http.post(url,pams).then(res=>{
           if(res.data.code==="0000"){
             Indicator.close();
-            Toast("保存成功");
+            Toast({message: '保存成功',
+              iconClass: 'mintui mintui-success'});
             setTimeout(()=>{
+              this.$store.commit("changeLoginPath",this.$route.path)
               this.$router.push({path:"/address"})
             },1000)
           }
         });
+      },
+      isGetTowncode(){
+        if(this.getCurrentPosition){
+           return typeof this.getCurrentPosition.addressComponent.towncode==="object"?"":this.getCurrentPosition.addressComponent.towncode;
+        }else{
+          return ""
+        }
       },
       testText(text){
         if(text.length>=60){
@@ -113,7 +133,7 @@ import {positionSeesionFun} from "./positionFun"
       },
       testName(name){
         if(!(/^[0-9a-zA-Z\u4e00-\u9fa5_]{1,20}$/.test(name))){
-          Toast("用户名格式不正确");
+          Toast("联系人格式不正确");
           return false
         }else{
           return true
@@ -121,7 +141,7 @@ import {positionSeesionFun} from "./positionFun"
       },
       telTest(val){
        if(!(/^1[34578]\d{9}$/.test(this.tel))){
-         Toast("手机号格式不正确");
+         Toast("联系人格式不正确");
          return false;
        }else{
          return true;
@@ -139,7 +159,7 @@ import {positionSeesionFun} from "./positionFun"
         return "01";
       },
       getCityValues(picker,shengId){
-        var url2 = common.apidomain+"/areainfo/findlistareaInfo?id="+shengId;
+        var url2 = this.$common.apidomain+"/areainfo/findlistareaInfo?id="+shengId;
         this.$http.get(url2).then(res=>{
             this.cityList=res.data.result;
             city = [];
@@ -164,7 +184,7 @@ import {positionSeesionFun} from "./positionFun"
           }
         }
       },
-      getStreet(data) {       //得到街道
+      getStreet(data) {  //得到街道
         if(!data){
           return;
         }
@@ -175,7 +195,7 @@ import {positionSeesionFun} from "./positionFun"
         }
       },
       getAreaValues(picker,shengId){
-        var url2 = common.apidomain+"/areainfo/findlistareaInfo?id="+shengId;
+        var url2 = this.$common.apidomain+"/areainfo/findlistareaInfo?id="+shengId;
         this.$http.get(url2).then(res=>{
           this.xianList=res.data.result;
           area = [];
@@ -204,83 +224,22 @@ import {positionSeesionFun} from "./positionFun"
           this.isSelectStreet=false;
           this.isStreet="";
       },//取消选择 街道
-      chackchange(values){
-        if(sheng[0]!=values[0])return 0;
-        if(sheng[1]!=values[1])return 1;
-        if(sheng[2]!=values[2])return 2;
-        return 999;
-      },
-
-      //选择省市区
-
-      onValuesChangePosition(picker,values){
-        if(this.flag){
-          this.flag=false;
-            console.log(values[0]='广东省');
-        }
-        if(!this.jieliufa)return;
-        this.position = (values[0]===undefined?"":values[0])+" "+(values[1]===undefined?" ":values[1])+" "+(values[2]===undefined?" ":values[2]);
-        if(values[0]==undefined){
-          this.position="";
-        }
-//        debugger
-        var c = this.chackchange(values);
-
-        if(0==c){
-//          debugger
-          this.getCityValues(picker,this.getShengId(values[0]));
-          sheng[0] = values[0];
-        }else if(1==c){
-          this.getAreaValues(picker,this.getShiId(values[1]));
-          sheng[1] = values[1];
-
-        }else if(2==c){
-          sheng[2] = values[2];
-
-        }else if(999==c){
-        }
-        //  values[2]
-        this.shiId = this.getStreet(values[2])  //区对象数组 得到区id 传给街道
-      },
-      getAreaList(){
-          getAreaList().then(respon=>{
-            let code=respon["code"];
-          })
-      },
-      onValuesChangeStreet(picker, values) {
-        this.isStreet=values[0]
-      },
-//获取省市区 start
+      //获取省市区 start
       select(){   //深市区选择；
-        this.flag=true;
-       area=[];//区级数据；
-        province=[]; //省级数据
-        city.length=0; //市级数据
-        city=[]; //市级数据
-       sheng=[];
-        if(this.isSelectStreet){
-          return;
-        }
-        this.isSelectOption=!this.isSelectOption;
-        this.position='';
-        this.slotsStreet[0].values=[];
-        this.isStreet="";
+
+        //lee 注释 2018-1-4 s
+        this.iframe_show=true; //lee显示地图
+//
       },
-//获取省市区 end
-      isShowPosition(){
-        this.isSelectOption=false;
-        if(this.isSelectStreet){
-          this.isSelectStreet= !this.isSelectStreet;
-        }
-      },
-//获取街道数据 start
+
+      //获取街道数据 start
       selectStreet(){
         this.slotsStreet[0].values= streetData;
         if(this.isSelectOption){
           return;
         }
         this.isSelectStreet=!this.isSelectStreet;
-          var url=common.apidomain+"/areainfo/findlistareaInfo?id="+this.shiId;
+          var url=this.$common.apidomain+"/areainfo/findlistareaInfo?id="+this.shiId;
           this.$http.get(url).then(res=>{
               if(res.data.code!=="0000"){
                 Toast("请选择省市区");
@@ -289,41 +248,93 @@ import {positionSeesionFun} from "./positionFun"
               }
             this.streetList=[];
             this.streetList=res.data.result;
-//              debugger;
-            streetData.length=0;                      //把街道列表清空
+            streetData.length=0;//把街道列表清空
 
-            for(var i=0;i<this.streetList.length;i++){
+            for(let i=0;i<this.streetList.length;i++){
               streetData.push(this.streetList[i].name);
             }
-            console.log(this.streetList);
-            console.log(streetData);
+
           })
       },
-//获取街道数据 end
-//选择街道点击完成 start
+    //获取街道数据 end
+    //选择街道点击完成 start
       selectorStreet(){
         this.streetList.forEach((res,i)=>{
-          if( res.name==this. isStreet){
+          if( res.name==this.isStreet){
             this.streetId=res.id
           }
         });
         this.isSelectStreet= !this.isSelectStreet;
       },
-//选择街道点击完成 end
+      //选择街道点击完成 end
       importText(){
 
       },
       change(){
         Indicator.close();
-      }
+      },
+
+      iframe_show_close(){ //lee 点击返回隐藏iframe
+        this.iframe_show=false;
+      },
+      iframe_show_open(){ //lee 点击一直显示iframe
+        this.iframe_show=true;
+      },
+      iframe_storage_data(){ //lee 监听storage
+        let _this=this;
+          window.addEventListener("storage", function (data) { //lee监听iframe存的storage   data.key
+            if(data.key=="dd_poi"){  //lee点击地图选项后隐藏地图
+              _this.iframe_show=false;
+            }
+          });
+      },
+      iframe_getItem(){ //lee 取storage的dd_poi对象
+        let _this=this,dd_poi=null;//dd_poi=storage存储地址信息
+        if(sessionStorage.getItem("dd_poi")){
+          dd_poi=JSON.parse(sessionStorage.getItem("dd_poi"));
+          return dd_poi
+        }
+      },
+      iframe_backward(callback){ //lee 逆向地理查询
+        let _this=this,url=null,url_northSouthLine=null;// url=逆向地理请求地址， url_northSouthLine=南北线
+        if(_this.iframe_getItem()){
+          url_northSouthLine=_this.iframe_getItem().location.lng+','+_this.iframe_getItem().location.lat; //拿东经和北纬
+          url=`https://restapi.amap.com/v3/geocode/regeo?location=${url_northSouthLine}&key=6f7abd3e0d62ca6affa0e32b55138d1a`;
+          _this.$http.get(url).then(data=>{
+            if(data.data.infocode=='10000'){ //info=ok或者infocode=10000表示请求成功，data.data.regeocode=地理数据集合
+              callback(data.data.regeocode); //回调取数据
+            }
+          });
+        }
+      },
     },
     watch:{
-      "$route":"change"
+      "$route":"change",
+      iframe_show(newVal,oldVal){  //lee 监听是否点击iframe输出框
+            let _this=this;
+
+            if(_this.iframe_getItem()){
+              _this.iframe_address=''; //清空
+                _this.iframe_address=_this.iframe_getItem().name; //名称给iframe_address到页面显示
+            }
+            if(!newVal){ //关闭地图弹出框的时候去拿逆向地理位置
+              _this.iframe_backward(data=>{
+
+                this.getCurrentPosition=data;
+                if(data.addressComponent.citycode!=="0755"){
+                    this.iframe_address="";
+                    this.$Toast("请选择深圳范围内地区")
+                }
+              });
+            }
+      },
     },
     data() {
       return {
-        jieliufa:false,//
+        jieliufa:false,
+        location:{},
         flag:true,
+        getCurrentPosition:"",
         text:"",
         id:"",
         isSelectOption:false,//选择省份城市
@@ -367,46 +378,55 @@ import {positionSeesionFun} from "./positionFun"
             className: 'slot1',
             textAlign: 'center',
           }
-        ]
+        ],
+        iframe_address:'',  //lee 显示地址文字
+        iframe_show:false, //lee iframe不显示
       };
     },
     created(){
-    area.length=0;//区级数据；
-    province.length=0; //省级数据
-    city.length=0; //市级数据
-    sheng.length=0;
-    streetData.length=0; //街道
+      let location=getSessionUserInfo("dd_poi").location,locationArray={},k;
+          for(k in location){
+            if(k==="lat"||k==="lng"){
+              locationArray[k]=location[k]
+            }
+          }
+      this.location=locationArray;
+      area.length=0;//区级数据；
+      province.length=0; //省级数据
+      city.length=0; //市级数据
+      sheng.length=0;
+      streetData.length=0; //街道
       if(this.$route.params.index==='1'){
-        positionSeesionFun(this)
+//        positionSeesionFun(this)
+        positionEdit.call(this)
       }else{
         this.indexId="0";
         this.tel = getSessionUserInfo("userInfo").phoneNum||""
       }
 
-      let url=common.apidomain+"/areainfo/findlistareaInfo?id=0";
+      let url=this.$common.apidomain+"/areainfo/findlistareaInfo?id=0";
       this.$http.get(url).then(res=>{
         // province=[];  //清空
         this.provinceList=res.data.result;
-        for(var i=0;i<this.provinceList.length;i++){  //把省级name放到数组里面去
+        for(let i=0;i<this.provinceList.length;i++){  //把省级name放到数组里面去
           province.push(this.provinceList[i].name);
         }
         province= Array.from(new Set(province));
         if(this.provinceList.length>0){
-          var url2 = common.apidomain+"/areainfo/findlistareaInfo?id="+this.provinceList[0].id;
+          let url2 = this.$common.apidomain+"/areainfo/findlistareaInfo?id="+this.provinceList[0].id;
           this.$http.get(url2).then(res=>{
             // city=[];
             this.cityList=res.data.result;
-            for(var i=0;i<this.cityList.length;i++){
+            for(let i=0;i<this.cityList.length;i++){
               city.push(this.cityList[i].name);
             }
             city= Array.from(new Set(city) )
-
             if(this.cityList.length>0){
-              var url3 = common.apidomain+"/areainfo/findlistareaInfo?id="+this.cityList[0].id;
+              let url3 = this.$common.apidomain+"/areainfo/findlistareaInfo?id="+this.cityList[0].id;
               this.$http.get(url3).then(res=>{
                 // area=[];
                 this.xianList = res.data.result;
-                for(var i=0;i<this.xianList.length;i++){
+                for(let i=0;i<this.xianList.length;i++){
                   area.push(this.xianList[i].name);
                 }
                 area= Array.from(new Set(area) )
@@ -419,8 +439,15 @@ import {positionSeesionFun} from "./positionFun"
           });
         }
       });
+    },
+    mounted(){
+        let _this=this;
+        this.$nextTick(function () {
+          _this.iframe_storage_data();  //lee调用监听iframe的storage
+        });
     }
   }
+
 </script >
 <style scoped lang="less">
   #box{
@@ -464,7 +491,6 @@ import {positionSeesionFun} from "./positionFun"
   background:#fff;
   overflow: hidden;
   width:100%;
-  padding:0 32/50rem;
   font-family: PingFangSC-Regular;
   font-size: 32/50rem;
   color: #9B9B9B;
@@ -472,15 +498,19 @@ import {positionSeesionFun} from "./positionFun"
   padding-right:0;
   >.content{
     display: flex;
-    height:88/50rem;
+    height:2rem;
     position:relative;
     border-bottom:1px solid rgba(0,0,0,0.1);
     padding-right:32/50rem;
     >.contacts{
-      width:20%;
+      width:4rem;
       height:100%;
       font-size: 32/50rem;
-      line-height: 88/50rem;
+      text-align: center;
+      line-height:2rem;
+      letter-spacing:.1rem;
+      font-family:PingFangSC-Light;
+      color:#000;
     }
     >.user_name{
       line-height: 88/50rem;
@@ -503,12 +533,14 @@ import {positionSeesionFun} from "./positionFun"
     height:auto;
     >.user_name{
       margin-top:.5rem;
-      font-family: PingFangSC-Regular;
-      font-size: 30/50rem;
+      font-size: 32/50rem;
       color:#000;
       height:auto;
       padding-bottom:2rem;
+      padding-left:.7rem;
       line-height: 1rem;
+      font-family:PingFangSC-Light;
+
       letter-spacing: -0.77/50rem;
     }
     border:none;
@@ -526,7 +558,6 @@ import {positionSeesionFun} from "./positionFun"
       width:16/50rem;
       height:26/50rem;
       vertical-align:middle;
-
     }
   }
   input{
@@ -536,24 +567,26 @@ import {positionSeesionFun} from "./positionFun"
 .footer {
   width: 100%;
   position: fixed;
-  bottom: 0;
+  bottom: 29/50rem;
   left: 0;
   height: 98/50rem;
   line-height: 98/50rem;
-  background: #FFFFFF;
+  padding:0 26/50rem;
+  background:transparent;
   font-family: PingFangSC-Medium;
   color: #EB5312;
   letter-spacing: 0;
   > .accounts_btn {
     height: 100%;
     display: inline-block;
-    background: #EB5312;
     width:100%;
     text-align: center;
     font-family: PingFangSC-Regular;
     font-size: 32/50rem;
     color: #FFFFFF;
     letter-spacing: 0;
+    background-image:linear-gradient(-63deg, #ef6a1c 0%, #ea5413 99%);
+    border-radius:2rem;
   }
 }
 .slot1{
@@ -561,14 +594,43 @@ import {positionSeesionFun} from "./positionFun"
 }
 #box{
   padding-top:10px;
-  .textArea{
-    width:13.5rem;
-
-  }
 }
 .input_box{
-  // height:100vh;
+  /*// height:100vh;*/
 }
 .picker-items{
 }
+
+/*lee s*/
+  .iframe_box{
+    width:100%;
+    height:100%;
+    position:absolute;
+    right:0;
+    bottom:0;
+    z-index: 999;
+    background-color:rgba(34,34,34,.8);
+    overflow: hidden;
+  }
+  .iframe_back{
+    position: absolute;
+    top: .36rem;
+    left: .3rem;
+    z-index: 999999;
+    width: 1.4rem;
+    height: 1.6rem;
+  }
+  #iframe1{
+    position:absolute;
+    right:0;
+    top: 0;
+    z-index: 99999;
+    width: 100%;
+    height: 100%;
+    /*height:18rem;*/
+    /*height: 60%;*/
+    /*margin-top: 5rem;*/
+    overflow: hidden;
+  }
+  /*lee e*/
 </style>

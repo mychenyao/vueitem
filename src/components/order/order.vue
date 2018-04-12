@@ -1,15 +1,26 @@
 <template>
   <div id="box">
    <mt-navbar v-model="selected">
-		  <mt-tab-item id="1"><span style="font-size:.64rem">进行中</span></mt-tab-item>
-		  <mt-tab-item id="2"><span style="font-size:.64rem">已完成</span></mt-tab-item>
-		  <mt-tab-item id="3"><span style="font-size:.64rem">已取消</span></mt-tab-item>
+		  <mt-tab-item id="1"><span style="font-size:.64rem;">进行中</span></mt-tab-item>
+		  <mt-tab-item id="2"><span style="font-size:.64rem;">已完成</span></mt-tab-item>
+		  <mt-tab-item id="3"><span style="font-size:.64rem;">已取消</span></mt-tab-item>
 </mt-navbar>
 <!-- tab-container -->
 <mt-tab-container v-model="selected" :swipeable="bool">
   <mt-tab-container-item id="1">
-
     <!--待付款-->
+
+
+
+
+
+
+
+
+
+
+
+
 
    	<div class="keep_container" v-for="(item,index) in dataList" :key="index" @click="sendDetailed(item,index)">
    		<h4 class="order_number">交易订单号 {{item.order.id}}<span class="status">{{item.orderState}}</span></h4>
@@ -17,11 +28,11 @@
 		    <li class="mui-table-view-cell" v-for="(item1,index) in item.services">
 		        <div class="cause_top">
               <span class="cause_type">{{item1.serviceFullName}}</span>
-              <span class="mui-badge" v-show="false">￥{{item1.price1}}</span>
+              <!--<span class="mui-badge" v-show="false">￥{{item1.price1}}</span>-->
             </div>
 		        <div class="cause">
               <span class="cause_name">
-              {{item1.serviceTags}}
+                  {{item1.serviceTags}}
                 <!--故障原因-->
               </span>
               <span class="sum">
@@ -75,6 +86,7 @@
  import {setLocalStorage,removerStorage,setSessionUserInfo,getSessionUserInfo} from "@/js/session"
  const accomplish = resolve =>require(["./accomplish"],resolve);
  const cancel = resolve =>require(["./cancel"],resolve);
+// import common from "@/js/baseHttp"
  import {Toast} from "mint-ui";
  import { Indicator } from 'mint-ui';
  import {AFFIRM} from "@/components/savertype/js/isStatus"
@@ -111,7 +123,6 @@ export default {
       setLocalStorage("orderDetails",item);
       this.$store.commit("changeOrder",item);
       setSessionUserInfo("orderState","1");
-
       this.$router.push({path:"/staymoney"});
     },
     getData(){
@@ -166,6 +177,9 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+  .mint-tab-item{
+    color:#888;
+  }
   .mint-tab-item-label{
     font-size:30px !important;
   }
@@ -210,6 +224,7 @@ a{
 	font-size: 32/50rem;
 	padding-top:.7rem;
 	letter-spacing: 0;
+
 }
 >.mint-navbar{
 	height:100/50rem;
@@ -231,11 +246,10 @@ a{
 	margin-top:.5rem;
 	>.order_number{
 		font-family: PingFangSC-Regular;
-		font-size:24/50rem;
+		font-size:26/50rem;
 		color: #9B9B9B;
-		height:60/50rem;
 		padding:0 32/50rem;
-		line-height:60/50rem;
+		line-height:80/50rem;
 		font-weight: normal;
 		letter-spacing: 0;
 		>.status{
@@ -244,14 +258,16 @@ a{
 		}
 	}
     .cause_top{
-      margin-bottom:2%;
       color: #4A4A4A;
-      padding-right:2rem;
+      /*padding-right:2rem;*/
       letter-spacing: 0;
+      width:11.9rem;
+      margin-top:46/50rem;
+      display: inline-block;
       .mui-badge,.cause_type{
         background:none;
         font-family: PingFangSC-Regular;
-        font-size: 28/50rem;
+        font-size: 34/50rem;
 
     }
      > .mui-badge{
@@ -266,21 +282,30 @@ a{
 		font-size: 28/50rem;
 		color: #4A4A4A;
     border-bottom:1px solid rgba(230,230,230,0.50);
-    padding:30/50rem 34/50rem;
+    padding:5/50rem 34/50rem;
 		letter-spacing: 0;
+    padding-top:10/50rem;
+    /*min-height:4.9rem;*/
+    /*<!--height:160/50rem;-->*/
 		>.cause{
       letter-spacing: 0;
-      /*overflow: hidden;*/
+      line-height: 2.2em;
+      overflow: hidden;
       height:auto;
 			>.cause_name{
 				float:left;
+        /*min-height: 6rem;*/
+        max-width:12rem;
+        padding-top:.3rem;
+        margin-bottom:.6rem;
+        line-height: 1.5em;
 			}
 			>.sum{
 				float:right;
 			}
 			>.cause_name,.sum{
         color: #C8C8CB;
-				font-size: 22/50rem;
+				font-size: 30/50rem;
 				font-family: PingFangSC-Regular;
 
 				letter-spacing: 0;
@@ -306,12 +331,13 @@ a{
    overflow: hidden;
     position:relative;
     width:12rem;
+    line-height: 41/50rem;
     >p{
-      font-size:22/50rem;
+      font-size:32/50rem;
       color:#9B9B9B;
       text-align: right;
       >.defray_price{
-        font-size: 28/50rem;
+        font-size: 34/50rem;
         color: #000;
         letter-spacing: 0;
       }

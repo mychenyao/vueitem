@@ -6,7 +6,7 @@
           <li class="mui-table-view-cell"   v-for="(item1,index) in item.services"  @click="sendDetailed(item,index)" >
             <p class="cause_top">
               <span class="cause_type">{{item1.serviceFullName}}</span>
-              <span class="mui-badge" v-show="false">￥{{item1.price1}}</span>
+              <!--<span class="mui-badge" v-show="false">￥{{item1.price1}}</span>-->
             </p>
             <p class="cause">
               <span class="cause_name">
@@ -65,7 +65,7 @@
             }
           })
            },500)
-        
+
         }
     }
 </script>
@@ -133,11 +133,11 @@
     margin-top:.5rem;
     >.order_number{
       font-family: PingFangSC-Regular;
-      font-size:24/50rem;
+      font-size:26/50rem;
       color: #9B9B9B;
-      height:60/50rem;
+      height:70/50rem;
       padding:0 32/50rem;
-      line-height:60/50rem;
+      line-height:70/50rem;
       font-weight: normal;
       letter-spacing: 0;
       >.status{
@@ -146,15 +146,18 @@
       }
     }
     .cause_top{
-      margin-bottom:2%;
+      /*margin-bottom:2%;*/
       color: #4A4A4A;
-      padding-right:2rem;
+      /*padding-right:2rem;*/
       letter-spacing: 0;
+      width:11.9rem;
+      margin-top:46/50rem;
+      display: inline-block;
       .mui-badge,.cause_type{
         background:none;
         font-family: PingFangSC-Regular;
-        font-size: 28/50rem;
-
+        font-size: 34/50rem;
+        /*line-height: 1.2em;*/
       }
       > .mui-badge{
         float:right;
@@ -163,26 +166,35 @@
       }
     }
     .mui-table-view-cell{
-
       font-family: PingFangSC-Regular;
       font-size: 28/50rem;
       color: #4A4A4A;
       border-bottom:1px solid rgba(230,230,230,0.50);
-      padding:30/50rem 34/50rem;
+      padding:5/50rem 34/50rem;
       letter-spacing: 0;
+      /*height:500px;*/
+      padding-top:10/50rem;
+      /*<!--max-height:160/50rem;-->*/
+      /*<!--height:160/50rem;-->*/
+      /*padding-bottom:1rem;*/
       >.cause{
         letter-spacing: 0;
-        /*overflow: hidden;*/
+        overflow: hidden;
         height:auto;
+        line-height: 2.2em;
         >.cause_name{
           float:left;
+          max-width:12rem;
+          padding-top:.3rem;
+          margin-bottom:.6rem;
+          line-height: 1.5em;
         }
         >.sum{
           float:right;
         }
         >.cause_name,.sum{
           color: #C8C8CB;
-          font-size: 22/50rem;
+          font-size: 30/50rem;
           font-family: PingFangSC-Regular;
 
           letter-spacing: 0;
@@ -192,6 +204,10 @@
   }
   .mui-table-view-cell:after{
     background:none;
+  }
+  .mui-table-view{
+    /*padding-bottom:1rem;*/
+    height:auto;
   }
   .mui-table-view-cell:last-of-type{
     border-bottom:none;
@@ -208,12 +224,13 @@
       overflow: hidden;
       position:relative;
       width:12rem;
+      line-height: 41/50rem;
       >p{
-        font-size:22/50rem;
+        font-size:32/50rem;
         color:#9B9B9B;
         text-align: right;
         >.defray_price{
-          font-size: 28/50rem;
+          font-size: 34/50rem;
           color: #000;
           letter-spacing: 0;
         }

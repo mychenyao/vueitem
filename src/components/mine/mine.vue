@@ -1,23 +1,27 @@
 <template>
   <div id="box">
     <div class="picture_back">
-      <img src="../../../static/images/userImg.png" alt="">
+      <img :src="!!userInfo.imgUrl?userInfo.imgUrl:'../../../static/images/userImg.png'" alt="" :style="!!userInfo.imgUrl?'border-radius: 50%;':''" >
+      <h3>
+        {{!!userInfo.nickName?userInfo.nickName:'小叮叮'}}
+      </h3>
+      <p>{{cityName}}</p>
     </div>
     <mine-lists :dataList="dataList"></mine-lists>
     <div class="picture_list">
       <ul>
         <router-link v-for="(item,index) in linkDataList" :key="index" tag="li" :to="item.path">
-          <i class="icon" :class="item.clas"></i>&nbsp;&nbsp;{{item.name}}
-          <i class="icon right_Icon" ></i>
+          {{item.name}}
+          <i class="icon right_Icon"></i>
         </router-link>
         <li @click="tel">
-          <i class="icon service"></i>&nbsp;&nbsp;客服热线
+            客服热线
           <i class="icon right_Icon" ></i>
-        </li>
-        <li @click="onLine" style="border:none">
-          <i class="icon on_line"></i>&nbsp;&nbsp;在线客服
-          <i class="icon right_Icon" ></i>
-        </li>
+          </li>
+          <li @click="onLine" style="border:none">
+             在线客服
+              <i class="icon right_Icon" ></i>
+          </li>
       </ul>
       </div>
   </div>
@@ -26,12 +30,17 @@
   import {MessageBox} from "mint-ui"
   import mineLists from "./mineLists"
   import {getCookie} from "@/js/cookie"
+  import {getSession} from "@/js/session"
   export default{
+
     components:{
+
       mineLists
+
     },
         data(){
             return{
+              cityName:getSession()[0].name,
               dataList:[
                 {
                   name:"积分",
@@ -77,11 +86,12 @@
 //                  clas:"integral",
 //                }
               ],
+              userInfo:getSession("userInfo")
             }
         },
         methods:{
           onLine(){
-            window.location.href = "https://177dd.udesk.cn/im_client/?web_plugin_id=38935";
+            window.location.href = this.$common.customService;
           },
           tel(){
             window.location.href = "tel:4009991891";
@@ -138,17 +148,38 @@
 <style scoped lang="less">
   .picture_back{
     width:100%;
-    height:400/50rem;
-    background:url(../../../static/images/bg1.png)center no-repeat;
-    background-size:100% 100%;
+    height:260/50rem;
+    /*background:url(../../../static/images/bg1.png)center no-repeat;*/
+    background:rgba(235,87,21,0.77);
+    /*background-size:100% 100%;*/
     position:relative;
+    overflow: hidden;
     >img{
       display: block;
-      width:200/50rem;
+      width:123/50rem;
+      height:123/50rem;
       position:absolute;
-      left:50%;
+      left:0;
       top:50%;
-      transform:translate(-50%,-50%);
+      transform:translate(50%,-50%);
+    }
+    >h3{
+      font-family:PingFangSC-Semibold;
+      font-size:36/50rem;
+      color:#fff;
+      margin-top:90/50rem;
+      font-weight:normal;
+      margin-left:.3rem;
+      /*opacity:0;*/
+      transform:translateX(194/50rem);
+    }
+    >p{
+      line-height: 2em;
+      margin-left:.3rem;
+      transform:translateX(194/50rem);
+      font-family:PingFangSC-Medium;
+      font-size:28/50rem;
+      color:#ffffff;
     }
   }
   .picture_list{
@@ -158,18 +189,20 @@
     margin-top:20/50rem;
     margin-bottom:2rem;
     >ul{
+      background:#FFF;
       width:100%;
+      overflow: hidden;
       li{
         padding-left:20/50rem;
         position:relative;
-        font-family: PingFangSC-Regular;
+        margin:0 54/50rem;
         font-size: 32/50rem;
-        color: #4A4A4A;
         border-bottom:1px solid #eeeeee;
         background:#fff;
-        width:100%;
-        height:88/50rem;
-        line-height:88/50rem ;
+        font-family:PingFangSC-Light;
+        color:#000;
+        /*<!--height:88/50rem;-->*/
+        line-height:118/50rem ;
        >.order{
           background:url(../../assets/images/order1.png) center center no-repeat;
           background-size:100% 100%;
