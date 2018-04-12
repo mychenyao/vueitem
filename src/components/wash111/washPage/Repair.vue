@@ -11,14 +11,14 @@
              </ul>
       </div>
       <div id="repaire_right">
-            <ul id="repaire_right_list">
-                <v-touch tag="li"
-                         v-for="(item,index2) in repair_right_list1"
+            <ul id="repaire_right_list" >
+                <li v-for="(item,index2) in repair_right_list1"
                           :key="index2"
-                v-on:tap="repair_listActive2(item,index2)"
+                    @dblclick="dbClick=repair_listActive3(item,index2)"
+                @click="danClick=repair_listActive2(item,index2)"
                 :class="{repair_rightActive1:item.selector}">
                     {{item.b}}
-                </v-touch>
+                </li>
              </ul>
       </div>
   </div>
@@ -30,6 +30,8 @@ export default {
   props:["numberJian","isEmpty","choice"],
   data(){
       return{
+         danClick:false,
+        dbClick:false,
           repair_left_list:[],//维修主页面左边的列表
           repair_list_index: 0,//维修主页面左边的列表里面b的active
           repair_list_index1: 0,//维修主页面左边的列表里面span的active
@@ -132,11 +134,15 @@ export default {
     }else if(this.$store.state.paths === "n"){
       this.carts = getLocalStorage("fullName");
     }
-    console.log(this.repair_left_list)
-
 
   },
   methods:{
+    repair_listActive3(item,index2){
+      this.dbClick = true;
+      this.danClick = false;
+//      this.$Toast("双击")
+      return this.$set(this.repair_right_list1[index2],"selector",false);
+    },
 
     //点击左侧的li列表
     repair_listActive1(index,beans,id,item){
@@ -149,6 +155,8 @@ export default {
        this.$store.commit("changeSaverId",id)
     },
     repair_listActive2(i,index){
+      this.dbClick = false;
+      this.danClick = true;
       //跟新对象内的数组数据
 
        this.$set(this.repair_right_list1[index],"selector",!this.repair_right_list1[index].selector);
