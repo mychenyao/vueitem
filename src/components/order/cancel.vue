@@ -25,8 +25,6 @@
               <!-- 合计 -->
               <span class="defray_price">￥{{(item.serviceTotalWaitPay+item.serviceTotalPay)|floating}} </span>
               <br>
-              <!--<span class="defray_describe defray" v-if="true">已付款&nbsp;&nbsp;&nbsp;</span>{{item.serviceTotalPay}}<br>-->
-              <!--<span class="defray_describe defray" v-if="true">已退款&nbsp;&nbsp;&nbsp;</span>{{item.serviceTotalRefund}}-->
             </p>
           </div>
         </div>
